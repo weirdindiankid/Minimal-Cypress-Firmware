@@ -1,0 +1,8 @@
+C:/Users/humon/Desktop/CypressMinimal/MinimalFirmwareWorkspace/MinimalFirmware.cydsn/CortexM0/ARM_GCC_493/Debug/CyBootAsmGnu.o : C:/Users/humon/Desktop/CypressMinimal/MinimalFirmwareWorkspace/MinimalFirmware.cydsn/Generated_Source/PSoC4/CyBootAsmGnu.s C:/Users/humon/Desktop/CypressMinimal/MinimalFirmwareWorkspace/MinimalFirmware.cydsn/Generated_Source/PSoC4/cydevicegnu_trm.inc C:/Users/humon/Desktop/CypressMinimal/MinimalFirmwareWorkspace/MinimalFirmware.cydsn/Generated_Source/PSoC4/cyfittergnu.inc 
+
+C:/Users/humon/Desktop/CypressMinimal/MinimalFirmwareWorkspace/MinimalFirmware.cydsn/Generated_Source/PSoC4/CyBootAsmGnu.s : 
+
+C:/Users/humon/Desktop/CypressMinimal/MinimalFirmwareWorkspace/MinimalFirmware.cydsn/Generated_Source/PSoC4/cydevicegnu_trm.inc : 
+
+C:/Users/humon/Desktop/CypressMinimal/MinimalFirmwareWorkspace/MinimalFirmware.cydsn/Generated_Source/PSoC4/cyfittergnu.inc : 
+

@@ -1,0 +1,603 @@
+ARM GAS  C:\Users\humon\AppData\Local\Temp\cc52GuuO.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"I2C.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.I2C_write,"ax",%progbits
+  18              		.align	2
+  19              		.global	I2C_write
+  20              		.code	16
+  21              		.thumb_func
+  22              		.type	I2C_write, %function
+  23              	I2C_write:
+  24              	.LFB37:
+  25              		.file 1 ".\\I2C.c"
+   1:.\I2C.c       **** /* ========================================
+   2:.\I2C.c       ****  *
+   3:.\I2C.c       ****  * Copyright Humon, 2016
+   4:.\I2C.c       ****  * All Rights Reserved
+   5:.\I2C.c       ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:.\I2C.c       ****  *
+   7:.\I2C.c       ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:.\I2C.c       ****  * WHICH IS THE PROPERTY OF Humon.
+   9:.\I2C.c       ****  *
+  10:.\I2C.c       ****  * Author: Dharmesh Tarapore
+  11:.\I2C.c       ****  * Purpose: Serves as an abstraction layer for all
+  12:.\I2C.c       ****  *          I2C operations.
+  13:.\I2C.c       ****  * ========================================
+  14:.\I2C.c       **** */
+  15:.\I2C.c       **** 
+  16:.\I2C.c       **** #include <I2C.h>
+  17:.\I2C.c       **** 
+  18:.\I2C.c       **** bool I2C_write(uint32 slave_address, uint8 cmd[], uint32 buffer_size) {
+  26              		.loc 1 18 0
+  27              		.cfi_startproc
+  28 0000 80B5     		push	{r7, lr}
+  29              		.cfi_def_cfa_offset 8
+  30              		.cfi_offset 7, -8
+  31              		.cfi_offset 14, -4
+  32 0002 84B0     		sub	sp, sp, #16
+  33              		.cfi_def_cfa_offset 24
+  34 0004 00AF     		add	r7, sp, #0
+  35              		.cfi_def_cfa_register 7
+  36 0006 F860     		str	r0, [r7, #12]
+  37 0008 B960     		str	r1, [r7, #8]
+  38 000a 7A60     		str	r2, [r7, #4]
+  19:.\I2C.c       ****     // Clear Master Status
+ARM GAS  C:\Users\humon\AppData\Local\Temp\cc52GuuO.s 			page 2
+
+
+  20:.\I2C.c       ****     I2CM_I2CMasterClearStatus(); 
+  39              		.loc 1 20 0
+  40 000c FFF7FEFF 		bl	I2CM_I2CMasterClearStatus
+  21:.\I2C.c       ****     I2CM_I2CMasterWriteBuf(slave_address, cmd, buffer_size, I2CM_I2C_MODE_COMPLETE_XFER);
+  41              		.loc 1 21 0
+  42 0010 F968     		ldr	r1, [r7, #12]
+  43 0012 BA68     		ldr	r2, [r7, #8]
+  44 0014 7B68     		ldr	r3, [r7, #4]
+  45 0016 081C     		mov	r0, r1
+  46 0018 111C     		mov	r1, r2
+  47 001a 1A1C     		mov	r2, r3
+  48 001c 0023     		mov	r3, #0
+  49 001e FFF7FEFF 		bl	I2CM_I2CMasterWriteBuf
+  22:.\I2C.c       ****     
+  23:.\I2C.c       ****     // Wait until master completes write transfer
+  24:.\I2C.c       ****     while (0u == (I2CM_I2CMasterStatus() & I2CM_I2C_MSTAT_WR_CMPLT)) {
+  50              		.loc 1 24 0
+  51 0022 C046     		mov	r8, r8
+  52              	.L2:
+  53              		.loc 1 24 0 is_stmt 0 discriminator 1
+  54 0024 FFF7FEFF 		bl	I2CM_I2CMasterStatus
+  55 0028 021C     		mov	r2, r0
+  56 002a 0223     		mov	r3, #2
+  57 002c 1340     		and	r3, r2
+  58 002e F9D0     		beq	.L2
+  25:.\I2C.c       ****     }
+  26:.\I2C.c       ****     
+  27:.\I2C.c       ****      // If we observe no status errors 
+  28:.\I2C.c       ****     if (0u == (I2CM_I2C_MSTAT_ERR_XFER & I2CM_I2CMasterStatus()))  //no status errors
+  59              		.loc 1 28 0 is_stmt 1
+  60 0030 FFF7FEFF 		bl	I2CM_I2CMasterStatus
+  61 0034 021C     		mov	r2, r0
+  62 0036 8023     		mov	r3, #128
+  63 0038 9B00     		lsl	r3, r3, #2
+  64 003a 1340     		and	r3, r2
+  65 003c 07D1     		bne	.L3
+  29:.\I2C.c       ****     {
+  30:.\I2C.c       ****         /* Check if all bytes was written */
+  31:.\I2C.c       ****         if (I2CM_I2CMasterGetWriteBufSize() == buffer_size)
+  66              		.loc 1 31 0
+  67 003e FFF7FEFF 		bl	I2CM_I2CMasterGetWriteBufSize
+  68 0042 021E     		sub	r2, r0, #0
+  69 0044 7B68     		ldr	r3, [r7, #4]
+  70 0046 9A42     		cmp	r2, r3
+  71 0048 01D1     		bne	.L3
+  32:.\I2C.c       ****         {
+  33:.\I2C.c       ****             return true;
+  72              		.loc 1 33 0
+  73 004a 0123     		mov	r3, #1
+  74 004c 00E0     		b	.L4
+  75              	.L3:
+  34:.\I2C.c       ****         }
+  35:.\I2C.c       ****     }
+  36:.\I2C.c       ****     // If all the bytes were not written, we assume the write failed
+  37:.\I2C.c       ****     return false;
+  76              		.loc 1 37 0
+  77 004e 0023     		mov	r3, #0
+ARM GAS  C:\Users\humon\AppData\Local\Temp\cc52GuuO.s 			page 3
+
+
+  78              	.L4:
+  38:.\I2C.c       **** }
+  79              		.loc 1 38 0
+  80 0050 181C     		mov	r0, r3
+  81 0052 BD46     		mov	sp, r7
+  82 0054 04B0     		add	sp, sp, #16
+  83              		@ sp needed
+  84 0056 80BD     		pop	{r7, pc}
+  85              		.cfi_endproc
+  86              	.LFE37:
+  87              		.size	I2C_write, .-I2C_write
+  88              		.text
+  89              	.Letext0:
+  90              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+  91              		.file 3 "./I2C.h"
+  92              		.section	.debug_info,"",%progbits
+  93              	.Ldebug_info0:
+  94 0000 0E010000 		.4byte	0x10e
+  95 0004 0400     		.2byte	0x4
+  96 0006 00000000 		.4byte	.Ldebug_abbrev0
+  97 000a 04       		.byte	0x4
+  98 000b 01       		.uleb128 0x1
+  99 000c 44010000 		.4byte	.LASF21
+ 100 0010 01       		.byte	0x1
+ 101 0011 15000000 		.4byte	.LASF22
+ 102 0015 D5000000 		.4byte	.LASF23
+ 103 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 104 001d 00000000 		.4byte	0
+ 105 0021 00000000 		.4byte	.Ldebug_line0
+ 106 0025 02       		.uleb128 0x2
+ 107 0026 01       		.byte	0x1
+ 108 0027 06       		.byte	0x6
+ 109 0028 C3000000 		.4byte	.LASF0
+ 110 002c 02       		.uleb128 0x2
+ 111 002d 01       		.byte	0x1
+ 112 002e 08       		.byte	0x8
+ 113 002f 71000000 		.4byte	.LASF1
+ 114 0033 02       		.uleb128 0x2
+ 115 0034 02       		.byte	0x2
+ 116 0035 05       		.byte	0x5
+ 117 0036 2A010000 		.4byte	.LASF2
+ 118 003a 02       		.uleb128 0x2
+ 119 003b 02       		.byte	0x2
+ 120 003c 07       		.byte	0x7
+ 121 003d B0000000 		.4byte	.LASF3
+ 122 0041 02       		.uleb128 0x2
+ 123 0042 04       		.byte	0x4
+ 124 0043 05       		.byte	0x5
+ 125 0044 8E000000 		.4byte	.LASF4
+ 126 0048 02       		.uleb128 0x2
+ 127 0049 04       		.byte	0x4
+ 128 004a 07       		.byte	0x7
+ 129 004b 3E000000 		.4byte	.LASF5
+ 130 004f 02       		.uleb128 0x2
+ 131 0050 08       		.byte	0x8
+ 132 0051 05       		.byte	0x5
+ 133 0052 00000000 		.4byte	.LASF6
+ARM GAS  C:\Users\humon\AppData\Local\Temp\cc52GuuO.s 			page 4
+
+
+ 134 0056 02       		.uleb128 0x2
+ 135 0057 08       		.byte	0x8
+ 136 0058 07       		.byte	0x7
+ 137 0059 50000000 		.4byte	.LASF7
+ 138 005d 03       		.uleb128 0x3
+ 139 005e 04       		.byte	0x4
+ 140 005f 05       		.byte	0x5
+ 141 0060 696E7400 		.ascii	"int\000"
+ 142 0064 02       		.uleb128 0x2
+ 143 0065 04       		.byte	0x4
+ 144 0066 07       		.byte	0x7
+ 145 0067 1D000000 		.4byte	.LASF8
+ 146 006b 04       		.uleb128 0x4
+ 147 006c 38000000 		.4byte	.LASF9
+ 148 0070 02       		.byte	0x2
+ 149 0071 9801     		.2byte	0x198
+ 150 0073 2C000000 		.4byte	0x2c
+ 151 0077 04       		.uleb128 0x4
+ 152 0078 34010000 		.4byte	.LASF10
+ 153 007c 02       		.byte	0x2
+ 154 007d 9901     		.2byte	0x199
+ 155 007f 3A000000 		.4byte	0x3a
+ 156 0083 04       		.uleb128 0x4
+ 157 0084 0E000000 		.4byte	.LASF11
+ 158 0088 02       		.byte	0x2
+ 159 0089 9A01     		.2byte	0x19a
+ 160 008b 48000000 		.4byte	0x48
+ 161 008f 02       		.uleb128 0x2
+ 162 0090 04       		.byte	0x4
+ 163 0091 04       		.byte	0x4
+ 164 0092 CF000000 		.4byte	.LASF12
+ 165 0096 02       		.uleb128 0x2
+ 166 0097 08       		.byte	0x8
+ 167 0098 04       		.byte	0x4
+ 168 0099 97000000 		.4byte	.LASF13
+ 169 009d 02       		.uleb128 0x2
+ 170 009e 01       		.byte	0x1
+ 171 009f 08       		.byte	0x8
+ 172 00a0 7F000000 		.4byte	.LASF14
+ 173 00a4 02       		.uleb128 0x2
+ 174 00a5 04       		.byte	0x4
+ 175 00a6 07       		.byte	0x7
+ 176 00a7 3B010000 		.4byte	.LASF15
+ 177 00ab 05       		.uleb128 0x5
+ 178 00ac 04       		.byte	0x4
+ 179 00ad 6B000000 		.4byte	0x6b
+ 180 00b1 06       		.uleb128 0x6
+ 181 00b2 01       		.byte	0x1
+ 182 00b3 03       		.byte	0x3
+ 183 00b4 0E       		.byte	0xe
+ 184 00b5 C6000000 		.4byte	0xc6
+ 185 00b9 07       		.uleb128 0x7
+ 186 00ba 9E000000 		.4byte	.LASF16
+ 187 00be 00       		.sleb128 0
+ 188 00bf 07       		.uleb128 0x7
+ 189 00c0 6C000000 		.4byte	.LASF17
+ 190 00c4 01       		.sleb128 1
+ARM GAS  C:\Users\humon\AppData\Local\Temp\cc52GuuO.s 			page 5
+
+
+ 191 00c5 00       		.byte	0
+ 192 00c6 08       		.uleb128 0x8
+ 193 00c7 67000000 		.4byte	.LASF18
+ 194 00cb 03       		.byte	0x3
+ 195 00cc 0E       		.byte	0xe
+ 196 00cd B1000000 		.4byte	0xb1
+ 197 00d1 09       		.uleb128 0x9
+ 198 00d2 84000000 		.4byte	.LASF24
+ 199 00d6 01       		.byte	0x1
+ 200 00d7 12       		.byte	0x12
+ 201 00d8 C6000000 		.4byte	0xc6
+ 202 00dc 00000000 		.4byte	.LFB37
+ 203 00e0 58000000 		.4byte	.LFE37-.LFB37
+ 204 00e4 01       		.uleb128 0x1
+ 205 00e5 9C       		.byte	0x9c
+ 206 00e6 0A       		.uleb128 0xa
+ 207 00e7 2A000000 		.4byte	.LASF19
+ 208 00eb 01       		.byte	0x1
+ 209 00ec 12       		.byte	0x12
+ 210 00ed 83000000 		.4byte	0x83
+ 211 00f1 02       		.uleb128 0x2
+ 212 00f2 91       		.byte	0x91
+ 213 00f3 74       		.sleb128 -12
+ 214 00f4 0B       		.uleb128 0xb
+ 215 00f5 636D6400 		.ascii	"cmd\000"
+ 216 00f9 01       		.byte	0x1
+ 217 00fa 12       		.byte	0x12
+ 218 00fb AB000000 		.4byte	0xab
+ 219 00ff 02       		.uleb128 0x2
+ 220 0100 91       		.byte	0x91
+ 221 0101 70       		.sleb128 -16
+ 222 0102 0A       		.uleb128 0xa
+ 223 0103 A4000000 		.4byte	.LASF20
+ 224 0107 01       		.byte	0x1
+ 225 0108 12       		.byte	0x12
+ 226 0109 83000000 		.4byte	0x83
+ 227 010d 02       		.uleb128 0x2
+ 228 010e 91       		.byte	0x91
+ 229 010f 6C       		.sleb128 -20
+ 230 0110 00       		.byte	0
+ 231 0111 00       		.byte	0
+ 232              		.section	.debug_abbrev,"",%progbits
+ 233              	.Ldebug_abbrev0:
+ 234 0000 01       		.uleb128 0x1
+ 235 0001 11       		.uleb128 0x11
+ 236 0002 01       		.byte	0x1
+ 237 0003 25       		.uleb128 0x25
+ 238 0004 0E       		.uleb128 0xe
+ 239 0005 13       		.uleb128 0x13
+ 240 0006 0B       		.uleb128 0xb
+ 241 0007 03       		.uleb128 0x3
+ 242 0008 0E       		.uleb128 0xe
+ 243 0009 1B       		.uleb128 0x1b
+ 244 000a 0E       		.uleb128 0xe
+ 245 000b 55       		.uleb128 0x55
+ 246 000c 17       		.uleb128 0x17
+ 247 000d 11       		.uleb128 0x11
+ARM GAS  C:\Users\humon\AppData\Local\Temp\cc52GuuO.s 			page 6
+
+
+ 248 000e 01       		.uleb128 0x1
+ 249 000f 10       		.uleb128 0x10
+ 250 0010 17       		.uleb128 0x17
+ 251 0011 00       		.byte	0
+ 252 0012 00       		.byte	0
+ 253 0013 02       		.uleb128 0x2
+ 254 0014 24       		.uleb128 0x24
+ 255 0015 00       		.byte	0
+ 256 0016 0B       		.uleb128 0xb
+ 257 0017 0B       		.uleb128 0xb
+ 258 0018 3E       		.uleb128 0x3e
+ 259 0019 0B       		.uleb128 0xb
+ 260 001a 03       		.uleb128 0x3
+ 261 001b 0E       		.uleb128 0xe
+ 262 001c 00       		.byte	0
+ 263 001d 00       		.byte	0
+ 264 001e 03       		.uleb128 0x3
+ 265 001f 24       		.uleb128 0x24
+ 266 0020 00       		.byte	0
+ 267 0021 0B       		.uleb128 0xb
+ 268 0022 0B       		.uleb128 0xb
+ 269 0023 3E       		.uleb128 0x3e
+ 270 0024 0B       		.uleb128 0xb
+ 271 0025 03       		.uleb128 0x3
+ 272 0026 08       		.uleb128 0x8
+ 273 0027 00       		.byte	0
+ 274 0028 00       		.byte	0
+ 275 0029 04       		.uleb128 0x4
+ 276 002a 16       		.uleb128 0x16
+ 277 002b 00       		.byte	0
+ 278 002c 03       		.uleb128 0x3
+ 279 002d 0E       		.uleb128 0xe
+ 280 002e 3A       		.uleb128 0x3a
+ 281 002f 0B       		.uleb128 0xb
+ 282 0030 3B       		.uleb128 0x3b
+ 283 0031 05       		.uleb128 0x5
+ 284 0032 49       		.uleb128 0x49
+ 285 0033 13       		.uleb128 0x13
+ 286 0034 00       		.byte	0
+ 287 0035 00       		.byte	0
+ 288 0036 05       		.uleb128 0x5
+ 289 0037 0F       		.uleb128 0xf
+ 290 0038 00       		.byte	0
+ 291 0039 0B       		.uleb128 0xb
+ 292 003a 0B       		.uleb128 0xb
+ 293 003b 49       		.uleb128 0x49
+ 294 003c 13       		.uleb128 0x13
+ 295 003d 00       		.byte	0
+ 296 003e 00       		.byte	0
+ 297 003f 06       		.uleb128 0x6
+ 298 0040 04       		.uleb128 0x4
+ 299 0041 01       		.byte	0x1
+ 300 0042 0B       		.uleb128 0xb
+ 301 0043 0B       		.uleb128 0xb
+ 302 0044 3A       		.uleb128 0x3a
+ 303 0045 0B       		.uleb128 0xb
+ 304 0046 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\humon\AppData\Local\Temp\cc52GuuO.s 			page 7
+
+
+ 305 0047 0B       		.uleb128 0xb
+ 306 0048 01       		.uleb128 0x1
+ 307 0049 13       		.uleb128 0x13
+ 308 004a 00       		.byte	0
+ 309 004b 00       		.byte	0
+ 310 004c 07       		.uleb128 0x7
+ 311 004d 28       		.uleb128 0x28
+ 312 004e 00       		.byte	0
+ 313 004f 03       		.uleb128 0x3
+ 314 0050 0E       		.uleb128 0xe
+ 315 0051 1C       		.uleb128 0x1c
+ 316 0052 0D       		.uleb128 0xd
+ 317 0053 00       		.byte	0
+ 318 0054 00       		.byte	0
+ 319 0055 08       		.uleb128 0x8
+ 320 0056 16       		.uleb128 0x16
+ 321 0057 00       		.byte	0
+ 322 0058 03       		.uleb128 0x3
+ 323 0059 0E       		.uleb128 0xe
+ 324 005a 3A       		.uleb128 0x3a
+ 325 005b 0B       		.uleb128 0xb
+ 326 005c 3B       		.uleb128 0x3b
+ 327 005d 0B       		.uleb128 0xb
+ 328 005e 49       		.uleb128 0x49
+ 329 005f 13       		.uleb128 0x13
+ 330 0060 00       		.byte	0
+ 331 0061 00       		.byte	0
+ 332 0062 09       		.uleb128 0x9
+ 333 0063 2E       		.uleb128 0x2e
+ 334 0064 01       		.byte	0x1
+ 335 0065 3F       		.uleb128 0x3f
+ 336 0066 19       		.uleb128 0x19
+ 337 0067 03       		.uleb128 0x3
+ 338 0068 0E       		.uleb128 0xe
+ 339 0069 3A       		.uleb128 0x3a
+ 340 006a 0B       		.uleb128 0xb
+ 341 006b 3B       		.uleb128 0x3b
+ 342 006c 0B       		.uleb128 0xb
+ 343 006d 27       		.uleb128 0x27
+ 344 006e 19       		.uleb128 0x19
+ 345 006f 49       		.uleb128 0x49
+ 346 0070 13       		.uleb128 0x13
+ 347 0071 11       		.uleb128 0x11
+ 348 0072 01       		.uleb128 0x1
+ 349 0073 12       		.uleb128 0x12
+ 350 0074 06       		.uleb128 0x6
+ 351 0075 40       		.uleb128 0x40
+ 352 0076 18       		.uleb128 0x18
+ 353 0077 9642     		.uleb128 0x2116
+ 354 0079 19       		.uleb128 0x19
+ 355 007a 00       		.byte	0
+ 356 007b 00       		.byte	0
+ 357 007c 0A       		.uleb128 0xa
+ 358 007d 05       		.uleb128 0x5
+ 359 007e 00       		.byte	0
+ 360 007f 03       		.uleb128 0x3
+ 361 0080 0E       		.uleb128 0xe
+ARM GAS  C:\Users\humon\AppData\Local\Temp\cc52GuuO.s 			page 8
+
+
+ 362 0081 3A       		.uleb128 0x3a
+ 363 0082 0B       		.uleb128 0xb
+ 364 0083 3B       		.uleb128 0x3b
+ 365 0084 0B       		.uleb128 0xb
+ 366 0085 49       		.uleb128 0x49
+ 367 0086 13       		.uleb128 0x13
+ 368 0087 02       		.uleb128 0x2
+ 369 0088 18       		.uleb128 0x18
+ 370 0089 00       		.byte	0
+ 371 008a 00       		.byte	0
+ 372 008b 0B       		.uleb128 0xb
+ 373 008c 05       		.uleb128 0x5
+ 374 008d 00       		.byte	0
+ 375 008e 03       		.uleb128 0x3
+ 376 008f 08       		.uleb128 0x8
+ 377 0090 3A       		.uleb128 0x3a
+ 378 0091 0B       		.uleb128 0xb
+ 379 0092 3B       		.uleb128 0x3b
+ 380 0093 0B       		.uleb128 0xb
+ 381 0094 49       		.uleb128 0x49
+ 382 0095 13       		.uleb128 0x13
+ 383 0096 02       		.uleb128 0x2
+ 384 0097 18       		.uleb128 0x18
+ 385 0098 00       		.byte	0
+ 386 0099 00       		.byte	0
+ 387 009a 00       		.byte	0
+ 388              		.section	.debug_aranges,"",%progbits
+ 389 0000 1C000000 		.4byte	0x1c
+ 390 0004 0200     		.2byte	0x2
+ 391 0006 00000000 		.4byte	.Ldebug_info0
+ 392 000a 04       		.byte	0x4
+ 393 000b 00       		.byte	0
+ 394 000c 0000     		.2byte	0
+ 395 000e 0000     		.2byte	0
+ 396 0010 00000000 		.4byte	.LFB37
+ 397 0014 58000000 		.4byte	.LFE37-.LFB37
+ 398 0018 00000000 		.4byte	0
+ 399 001c 00000000 		.4byte	0
+ 400              		.section	.debug_ranges,"",%progbits
+ 401              	.Ldebug_ranges0:
+ 402 0000 00000000 		.4byte	.LFB37
+ 403 0004 58000000 		.4byte	.LFE37
+ 404 0008 00000000 		.4byte	0
+ 405 000c 00000000 		.4byte	0
+ 406              		.section	.debug_line,"",%progbits
+ 407              	.Ldebug_line0:
+ 408 0000 71000000 		.section	.debug_str,"MS",%progbits,1
+ 408      02004D00 
+ 408      00000201 
+ 408      FB0E0D00 
+ 408      01010101 
+ 409              	.LASF6:
+ 410 0000 6C6F6E67 		.ascii	"long long int\000"
+ 410      206C6F6E 
+ 410      6720696E 
+ 410      7400
+ 411              	.LASF11:
+ARM GAS  C:\Users\humon\AppData\Local\Temp\cc52GuuO.s 			page 9
+
+
+ 412 000e 75696E74 		.ascii	"uint32\000"
+ 412      333200
+ 413              	.LASF22:
+ 414 0015 2E5C4932 		.ascii	".\\I2C.c\000"
+ 414      432E6300 
+ 415              	.LASF8:
+ 416 001d 756E7369 		.ascii	"unsigned int\000"
+ 416      676E6564 
+ 416      20696E74 
+ 416      00
+ 417              	.LASF19:
+ 418 002a 736C6176 		.ascii	"slave_address\000"
+ 418      655F6164 
+ 418      64726573 
+ 418      7300
+ 419              	.LASF9:
+ 420 0038 75696E74 		.ascii	"uint8\000"
+ 420      3800
+ 421              	.LASF5:
+ 422 003e 6C6F6E67 		.ascii	"long unsigned int\000"
+ 422      20756E73 
+ 422      69676E65 
+ 422      6420696E 
+ 422      7400
+ 423              	.LASF7:
+ 424 0050 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 424      206C6F6E 
+ 424      6720756E 
+ 424      7369676E 
+ 424      65642069 
+ 425              	.LASF18:
+ 426 0067 626F6F6C 		.ascii	"bool\000"
+ 426      00
+ 427              	.LASF17:
+ 428 006c 74727565 		.ascii	"true\000"
+ 428      00
+ 429              	.LASF1:
+ 430 0071 756E7369 		.ascii	"unsigned char\000"
+ 430      676E6564 
+ 430      20636861 
+ 430      7200
+ 431              	.LASF14:
+ 432 007f 63686172 		.ascii	"char\000"
+ 432      00
+ 433              	.LASF24:
+ 434 0084 4932435F 		.ascii	"I2C_write\000"
+ 434      77726974 
+ 434      6500
+ 435              	.LASF4:
+ 436 008e 6C6F6E67 		.ascii	"long int\000"
+ 436      20696E74 
+ 436      00
+ 437              	.LASF13:
+ 438 0097 646F7562 		.ascii	"double\000"
+ 438      6C6500
+ 439              	.LASF16:
+ 440 009e 66616C73 		.ascii	"false\000"
+ARM GAS  C:\Users\humon\AppData\Local\Temp\cc52GuuO.s 			page 10
+
+
+ 440      6500
+ 441              	.LASF20:
+ 442 00a4 62756666 		.ascii	"buffer_size\000"
+ 442      65725F73 
+ 442      697A6500 
+ 443              	.LASF3:
+ 444 00b0 73686F72 		.ascii	"short unsigned int\000"
+ 444      7420756E 
+ 444      7369676E 
+ 444      65642069 
+ 444      6E7400
+ 445              	.LASF0:
+ 446 00c3 7369676E 		.ascii	"signed char\000"
+ 446      65642063 
+ 446      68617200 
+ 447              	.LASF12:
+ 448 00cf 666C6F61 		.ascii	"float\000"
+ 448      7400
+ 449              	.LASF23:
+ 450 00d5 433A5C55 		.ascii	"C:\\Users\\humon\\Desktop\\CypressMinimal\\MinimalF"
+ 450      73657273 
+ 450      5C68756D 
+ 450      6F6E5C44 
+ 450      65736B74 
+ 451 0103 69726D77 		.ascii	"irmwareWorkspace\\MinimalFirmware.cydsn\000"
+ 451      61726557 
+ 451      6F726B73 
+ 451      70616365 
+ 451      5C4D696E 
+ 452              	.LASF2:
+ 453 012a 73686F72 		.ascii	"short int\000"
+ 453      7420696E 
+ 453      7400
+ 454              	.LASF10:
+ 455 0134 75696E74 		.ascii	"uint16\000"
+ 455      313600
+ 456              	.LASF15:
+ 457 013b 73697A65 		.ascii	"sizetype\000"
+ 457      74797065 
+ 457      00
+ 458              	.LASF21:
+ 459 0144 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 459      4320342E 
+ 459      392E3320 
+ 459      32303135 
+ 459      30333033 
+ 460 0177 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0 -mthumb -g -O"
+ 460      20726576 
+ 460      6973696F 
+ 460      6E203232 
+ 460      31323230 
+ 461 01aa 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 461      66756E63 
+ 461      74696F6E 
+ 461      2D736563 
+ 461      74696F6E 
+ 462              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br
+ARM GAS  C:\Users\humon\AppData\Local\Temp\cc52GuuO.s 			page 11
+
+

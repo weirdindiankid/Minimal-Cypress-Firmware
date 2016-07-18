@@ -1,0 +1,5 @@
+C:\Users\humon\Desktop\CypressMinimal\MinimalFirmwareWorkspace\MinimalFirmware.cydsn\MinimalFirmware.cyprj|d2ecbef6-24dc-4df8-a27e-8585a7c1cf00
+C:\Program Files\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|24137094-2311-4bfd-8070-50c47131a03d
+C:\Program Files\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|8953f2fb-f339-440a-b24d-4a4183fbdd64
+C:\Program Files\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|e8d32cab-4042-4e97-a2a1-e68935453f7a
+C:\Program Files\Cypress\PSoC Creator\3.3\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|4dc40685-91c0-4b88-879a-72adf14a3cfc

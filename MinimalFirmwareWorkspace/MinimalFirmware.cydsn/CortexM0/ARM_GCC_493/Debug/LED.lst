@@ -1,0 +1,3170 @@
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"LED.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	led_array,40,4
+  18              		.comm	RGB_led_array,60,4
+  19              		.comm	led_pattern,1,1
+  20              		.section	.text.LED_initialize,"ax",%progbits
+  21              		.align	2
+  22              		.global	LED_initialize
+  23              		.code	16
+  24              		.thumb_func
+  25              		.type	LED_initialize, %function
+  26              	LED_initialize:
+  27              	.LFB37:
+  28              		.file 1 ".\\LED.c"
+   1:.\LED.c       **** /* ========================================
+   2:.\LED.c       ****  *
+   3:.\LED.c       ****  * Copyright Humon, 2016
+   4:.\LED.c       ****  * All Rights Reserved
+   5:.\LED.c       ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:.\LED.c       ****  *
+   7:.\LED.c       ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:.\LED.c       ****  * WHICH IS THE PROPERTY OF Humon.
+   9:.\LED.c       ****  *
+  10:.\LED.c       ****  * ========================================
+  11:.\LED.c       **** */
+  12:.\LED.c       **** #include <LED.h>
+  13:.\LED.c       **** 
+  14:.\LED.c       **** // This function initializes the LED driver
+  15:.\LED.c       **** void LED_initialize() {
+  29              		.loc 1 15 0
+  30              		.cfi_startproc
+  31 0000 80B5     		push	{r7, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 88B0     		sub	sp, sp, #32
+  36              		.cfi_def_cfa_offset 40
+  37 0004 00AF     		add	r7, sp, #0
+  38              		.cfi_def_cfa_register 7
+  16:.\LED.c       ****     uint8 sbuf[2];
+  17:.\LED.c       ****     sbuf[0] = 0x04;
+  39              		.loc 1 17 0
+  40 0006 1423     		mov	r3, #20
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 2
+
+
+  41 0008 FB18     		add	r3, r7, r3
+  42 000a 0422     		mov	r2, #4
+  43 000c 1A70     		strb	r2, [r3]
+  18:.\LED.c       ****     sbuf[1] = 0x41;
+  44              		.loc 1 18 0
+  45 000e 1423     		mov	r3, #20
+  46 0010 FB18     		add	r3, r7, r3
+  47 0012 4122     		mov	r2, #65
+  48 0014 5A70     		strb	r2, [r3, #1]
+  19:.\LED.c       ****     //M = 0: No transition detection, I = 1: individual currents, S = 1: shutdown mode off
+  20:.\LED.c       ****    
+  21:.\LED.c       ****     I2C_write(LED_SLAVE_ADDRESS, sbuf, 2);
+  49              		.loc 1 21 0
+  50 0016 1423     		mov	r3, #20
+  51 0018 FB18     		add	r3, r7, r3
+  52 001a 4420     		mov	r0, #68
+  53 001c 191C     		mov	r1, r3
+  54 001e 0222     		mov	r2, #2
+  55 0020 FFF7FEFF 		bl	I2C_write
+  22:.\LED.c       **** 
+  23:.\LED.c       ****     uint8 wbuf[8];
+  24:.\LED.c       ****     wbuf[0] = 0x09; // Select portd 12 - 15
+  56              		.loc 1 24 0
+  57 0024 0C23     		mov	r3, #12
+  58 0026 FB18     		add	r3, r7, r3
+  59 0028 0922     		mov	r2, #9
+  60 002a 1A70     		strb	r2, [r3]
+  25:.\LED.c       ****     wbuf[1] = 0x55; // Set ports 4 - 7, not connected, set as G{OP output to save power and autoinc
+  61              		.loc 1 25 0
+  62 002c 0C23     		mov	r3, #12
+  63 002e FB18     		add	r3, r7, r3
+  64 0030 5522     		mov	r2, #85
+  65 0032 5A70     		strb	r2, [r3, #1]
+  26:.\LED.c       ****     wbuf[2] = 0x55; // Set ports 8 - 11, not connected, set as G{OP output to save power and autoin
+  66              		.loc 1 26 0
+  67 0034 0C23     		mov	r3, #12
+  68 0036 FB18     		add	r3, r7, r3
+  69 0038 5522     		mov	r2, #85
+  70 003a 9A70     		strb	r2, [r3, #2]
+  27:.\LED.c       ****     wbuf[3] = 0x00; // Set ports 12 - 15 as LED drivers and auto-increment (next 4 bytes: set P12-P
+  71              		.loc 1 27 0
+  72 003c 0C23     		mov	r3, #12
+  73 003e FB18     		add	r3, r7, r3
+  74 0040 0022     		mov	r2, #0
+  75 0042 DA70     		strb	r2, [r3, #3]
+  28:.\LED.c       ****     wbuf[4] = 0x00; // Set ports 16 - 19 as LED drivers and auto-increment
+  76              		.loc 1 28 0
+  77 0044 0C23     		mov	r3, #12
+  78 0046 FB18     		add	r3, r7, r3
+  79 0048 0022     		mov	r2, #0
+  80 004a 1A71     		strb	r2, [r3, #4]
+  29:.\LED.c       ****     wbuf[5] = 0x00; // Set ports 20 - 23 as LED drivers and auto-increment
+  81              		.loc 1 29 0
+  82 004c 0C23     		mov	r3, #12
+  83 004e FB18     		add	r3, r7, r3
+  84 0050 0022     		mov	r2, #0
+  85 0052 5A71     		strb	r2, [r3, #5]
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 3
+
+
+  30:.\LED.c       ****     wbuf[6] = 0x00; // Set ports 24 - 27 as LED drivers and auto-increment
+  86              		.loc 1 30 0
+  87 0054 0C23     		mov	r3, #12
+  88 0056 FB18     		add	r3, r7, r3
+  89 0058 0022     		mov	r2, #0
+  90 005a 9A71     		strb	r2, [r3, #6]
+  31:.\LED.c       ****     wbuf[7] = 0xFF; // Set ports 28 - 31 as LED drivers and auto-increment (as input with pullup)
+  91              		.loc 1 31 0
+  92 005c 0C23     		mov	r3, #12
+  93 005e FB18     		add	r3, r7, r3
+  94 0060 FF22     		mov	r2, #255
+  95 0062 DA71     		strb	r2, [r3, #7]
+  32:.\LED.c       **** 
+  33:.\LED.c       ****     I2C_write(LED_SLAVE_ADDRESS, wbuf, 8);
+  96              		.loc 1 33 0
+  97 0064 0C23     		mov	r3, #12
+  98 0066 FB18     		add	r3, r7, r3
+  99 0068 4420     		mov	r0, #68
+ 100 006a 191C     		mov	r1, r3
+ 101 006c 0822     		mov	r2, #8
+ 102 006e FFF7FEFF 		bl	I2C_write
+  34:.\LED.c       ****     
+  35:.\LED.c       ****     int ctr = 0;
+ 103              		.loc 1 35 0
+ 104 0072 0023     		mov	r3, #0
+ 105 0074 FB61     		str	r3, [r7, #28]
+  36:.\LED.c       ****     // Turn LEDs off
+  37:.\LED.c       ****     for(ctr = 0; ctr < 13; ctr++) {
+ 106              		.loc 1 37 0
+ 107 0076 0023     		mov	r3, #0
+ 108 0078 FB61     		str	r3, [r7, #28]
+ 109 007a 14E0     		b	.L2
+ 110              	.L3:
+ 111              	.LBB2:
+  38:.\LED.c       ****         uint8 onBuf[2];
+  39:.\LED.c       ****         onBuf[0] = P12_REG + ctr;   //address of individual output pins
+ 112              		.loc 1 39 0 discriminator 3
+ 113 007c FB69     		ldr	r3, [r7, #28]
+ 114 007e DBB2     		uxtb	r3, r3
+ 115 0080 2C33     		add	r3, r3, #44
+ 116 0082 DAB2     		uxtb	r2, r3
+ 117 0084 0823     		mov	r3, #8
+ 118 0086 FB18     		add	r3, r7, r3
+ 119 0088 1A70     		strb	r2, [r3]
+  40:.\LED.c       ****         onBuf[1] = OFF; 
+ 120              		.loc 1 40 0 discriminator 3
+ 121 008a 0823     		mov	r3, #8
+ 122 008c FB18     		add	r3, r7, r3
+ 123 008e 0022     		mov	r2, #0
+ 124 0090 5A70     		strb	r2, [r3, #1]
+  41:.\LED.c       ****         // only D0 bit is used, other bits are ignored: 1=on, 0=off
+  42:.\LED.c       ****         I2C_write(LED_SLAVE_ADDRESS, onBuf, 2);
+ 125              		.loc 1 42 0 discriminator 3
+ 126 0092 0823     		mov	r3, #8
+ 127 0094 FB18     		add	r3, r7, r3
+ 128 0096 4420     		mov	r0, #68
+ 129 0098 191C     		mov	r1, r3
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 4
+
+
+ 130 009a 0222     		mov	r2, #2
+ 131 009c FFF7FEFF 		bl	I2C_write
+ 132              	.LBE2:
+  37:.\LED.c       ****         uint8 onBuf[2];
+ 133              		.loc 1 37 0 discriminator 3
+ 134 00a0 FB69     		ldr	r3, [r7, #28]
+ 135 00a2 0133     		add	r3, r3, #1
+ 136 00a4 FB61     		str	r3, [r7, #28]
+ 137              	.L2:
+  37:.\LED.c       ****         uint8 onBuf[2];
+ 138              		.loc 1 37 0 is_stmt 0 discriminator 1
+ 139 00a6 FB69     		ldr	r3, [r7, #28]
+ 140 00a8 0C2B     		cmp	r3, #12
+ 141 00aa E7DD     		ble	.L3
+  43:.\LED.c       ****     }
+  44:.\LED.c       ****     
+  45:.\LED.c       ****     // Set individual current registers for LEDs (Table 11, Table 12): ALL DIM
+  46:.\LED.c       ****     int i = 0;
+ 142              		.loc 1 46 0 is_stmt 1
+ 143 00ac 0023     		mov	r3, #0
+ 144 00ae BB61     		str	r3, [r7, #24]
+  47:.\LED.c       ****     // TODO: Take a look at datasheet to figure out what is going on
+  48:.\LED.c       ****     // Change to i = 0 and i < 13
+  49:.\LED.c       ****     // Used to be i = 1 and i < 14
+  50:.\LED.c       ****     for (i = 0; i < 13; i++) {
+ 145              		.loc 1 50 0
+ 146 00b0 0023     		mov	r3, #0
+ 147 00b2 BB61     		str	r3, [r7, #24]
+ 148 00b4 11E0     		b	.L4
+ 149              	.L5:
+ 150              	.LBB3:
+  51:.\LED.c       ****         uint8 currentBuf[2];
+  52:.\LED.c       ****         currentBuf[0] = 0x12 + i;
+ 151              		.loc 1 52 0 discriminator 3
+ 152 00b6 BB69     		ldr	r3, [r7, #24]
+ 153 00b8 DBB2     		uxtb	r3, r3
+ 154 00ba 1233     		add	r3, r3, #18
+ 155 00bc DAB2     		uxtb	r2, r3
+ 156 00be 3B1D     		add	r3, r7, #4
+ 157 00c0 1A70     		strb	r2, [r3]
+  53:.\LED.c       ****         currentBuf[1] = 0x00;
+ 158              		.loc 1 53 0 discriminator 3
+ 159 00c2 3B1D     		add	r3, r7, #4
+ 160 00c4 0022     		mov	r2, #0
+ 161 00c6 5A70     		strb	r2, [r3, #1]
+  54:.\LED.c       ****         I2C_write(LED_SLAVE_ADDRESS, currentBuf, 2);
+ 162              		.loc 1 54 0 discriminator 3
+ 163 00c8 3B1D     		add	r3, r7, #4
+ 164 00ca 4420     		mov	r0, #68
+ 165 00cc 191C     		mov	r1, r3
+ 166 00ce 0222     		mov	r2, #2
+ 167 00d0 FFF7FEFF 		bl	I2C_write
+ 168              	.LBE3:
+  50:.\LED.c       ****         uint8 currentBuf[2];
+ 169              		.loc 1 50 0 discriminator 3
+ 170 00d4 BB69     		ldr	r3, [r7, #24]
+ 171 00d6 0133     		add	r3, r3, #1
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 5
+
+
+ 172 00d8 BB61     		str	r3, [r7, #24]
+ 173              	.L4:
+  50:.\LED.c       ****         uint8 currentBuf[2];
+ 174              		.loc 1 50 0 is_stmt 0 discriminator 1
+ 175 00da BB69     		ldr	r3, [r7, #24]
+ 176 00dc 0C2B     		cmp	r3, #12
+ 177 00de EADD     		ble	.L5
+  55:.\LED.c       ****     } 
+  56:.\LED.c       ****     // Initialize LED Parameters
+  57:.\LED.c       ****     LED_init_params();
+ 178              		.loc 1 57 0 is_stmt 1
+ 179 00e0 FFF7FEFF 		bl	LED_init_params
+  58:.\LED.c       ****     led_pattern = 0;
+ 180              		.loc 1 58 0
+ 181 00e4 024B     		ldr	r3, .L6
+ 182 00e6 0022     		mov	r2, #0
+ 183 00e8 1A70     		strb	r2, [r3]
+  59:.\LED.c       **** }
+ 184              		.loc 1 59 0
+ 185 00ea BD46     		mov	sp, r7
+ 186 00ec 08B0     		add	sp, sp, #32
+ 187              		@ sp needed
+ 188 00ee 80BD     		pop	{r7, pc}
+ 189              	.L7:
+ 190              		.align	2
+ 191              	.L6:
+ 192 00f0 00000000 		.word	led_pattern
+ 193              		.cfi_endproc
+ 194              	.LFE37:
+ 195              		.size	LED_initialize, .-LED_initialize
+ 196              		.section	.text.LED_set_brightness,"ax",%progbits
+ 197              		.align	2
+ 198              		.global	LED_set_brightness
+ 199              		.code	16
+ 200              		.thumb_func
+ 201              		.type	LED_set_brightness, %function
+ 202              	LED_set_brightness:
+ 203              	.LFB38:
+  60:.\LED.c       **** 
+  61:.\LED.c       **** // Set LED Brightness
+  62:.\LED.c       **** void LED_set_brightness(uint8 led_num, uint8 brightness) {
+ 204              		.loc 1 62 0
+ 205              		.cfi_startproc
+ 206 0000 80B5     		push	{r7, lr}
+ 207              		.cfi_def_cfa_offset 8
+ 208              		.cfi_offset 7, -8
+ 209              		.cfi_offset 14, -4
+ 210 0002 84B0     		sub	sp, sp, #16
+ 211              		.cfi_def_cfa_offset 24
+ 212 0004 00AF     		add	r7, sp, #0
+ 213              		.cfi_def_cfa_register 7
+ 214 0006 021C     		mov	r2, r0
+ 215 0008 FB1D     		add	r3, r7, #7
+ 216 000a 1A70     		strb	r2, [r3]
+ 217 000c BB1D     		add	r3, r7, #6
+ 218 000e 0A1C     		add	r2, r1, #0
+ 219 0010 1A70     		strb	r2, [r3]
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 6
+
+
+  63:.\LED.c       ****     led_array[led_num].brightness = brightness;
+ 220              		.loc 1 63 0
+ 221 0012 FB1D     		add	r3, r7, #7
+ 222 0014 1A78     		ldrb	r2, [r3]
+ 223 0016 1349     		ldr	r1, .L9
+ 224 0018 131C     		mov	r3, r2
+ 225 001a 9B00     		lsl	r3, r3, #2
+ 226 001c 9B18     		add	r3, r3, r2
+ 227 001e 9B00     		lsl	r3, r3, #2
+ 228 0020 CB18     		add	r3, r1, r3
+ 229 0022 0833     		add	r3, r3, #8
+ 230 0024 BA1D     		add	r2, r7, #6
+ 231 0026 1278     		ldrb	r2, [r2]
+ 232 0028 9A71     		strb	r2, [r3, #6]
+  64:.\LED.c       ****     uint8 cmd[2];
+  65:.\LED.c       ****     cmd[0] = led_array[led_num].current_reg;
+ 233              		.loc 1 65 0
+ 234 002a FB1D     		add	r3, r7, #7
+ 235 002c 1A78     		ldrb	r2, [r3]
+ 236 002e 0D49     		ldr	r1, .L9
+ 237 0030 131C     		mov	r3, r2
+ 238 0032 9B00     		lsl	r3, r3, #2
+ 239 0034 9B18     		add	r3, r3, r2
+ 240 0036 9B00     		lsl	r3, r3, #2
+ 241 0038 CB18     		add	r3, r1, r3
+ 242 003a 0833     		add	r3, r3, #8
+ 243 003c 1A79     		ldrb	r2, [r3, #4]
+ 244 003e 0C23     		mov	r3, #12
+ 245 0040 FB18     		add	r3, r7, r3
+ 246 0042 1A70     		strb	r2, [r3]
+  66:.\LED.c       ****     cmd[1] = brightness;
+ 247              		.loc 1 66 0
+ 248 0044 0C23     		mov	r3, #12
+ 249 0046 FB18     		add	r3, r7, r3
+ 250 0048 BA1D     		add	r2, r7, #6
+ 251 004a 1278     		ldrb	r2, [r2]
+ 252 004c 5A70     		strb	r2, [r3, #1]
+  67:.\LED.c       ****     I2C_write(LED_SLAVE_ADDRESS, cmd, 2);
+ 253              		.loc 1 67 0
+ 254 004e 0C23     		mov	r3, #12
+ 255 0050 FB18     		add	r3, r7, r3
+ 256 0052 4420     		mov	r0, #68
+ 257 0054 191C     		mov	r1, r3
+ 258 0056 0222     		mov	r2, #2
+ 259 0058 FFF7FEFF 		bl	I2C_write
+  68:.\LED.c       **** }
+ 260              		.loc 1 68 0
+ 261 005c BD46     		mov	sp, r7
+ 262 005e 04B0     		add	sp, sp, #16
+ 263              		@ sp needed
+ 264 0060 80BD     		pop	{r7, pc}
+ 265              	.L10:
+ 266 0062 C046     		.align	2
+ 267              	.L9:
+ 268 0064 00000000 		.word	led_array
+ 269              		.cfi_endproc
+ 270              	.LFE38:
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 7
+
+
+ 271              		.size	LED_set_brightness, .-LED_set_brightness
+ 272              		.section	.text.LED_RGB_set_brightness,"ax",%progbits
+ 273              		.align	2
+ 274              		.global	LED_RGB_set_brightness
+ 275              		.code	16
+ 276              		.thumb_func
+ 277              		.type	LED_RGB_set_brightness, %function
+ 278              	LED_RGB_set_brightness:
+ 279              	.LFB39:
+  69:.\LED.c       **** 
+  70:.\LED.c       **** // Set RGB LED brightness
+  71:.\LED.c       **** void LED_RGB_set_brightness(uint8 led_num, uint8 brightness) {
+ 280              		.loc 1 71 0
+ 281              		.cfi_startproc
+ 282 0000 80B5     		push	{r7, lr}
+ 283              		.cfi_def_cfa_offset 8
+ 284              		.cfi_offset 7, -8
+ 285              		.cfi_offset 14, -4
+ 286 0002 84B0     		sub	sp, sp, #16
+ 287              		.cfi_def_cfa_offset 24
+ 288 0004 00AF     		add	r7, sp, #0
+ 289              		.cfi_def_cfa_register 7
+ 290 0006 021C     		mov	r2, r0
+ 291 0008 FB1D     		add	r3, r7, #7
+ 292 000a 1A70     		strb	r2, [r3]
+ 293 000c BB1D     		add	r3, r7, #6
+ 294 000e 0A1C     		add	r2, r1, #0
+ 295 0010 1A70     		strb	r2, [r3]
+  72:.\LED.c       ****     uint8 led_num_pair = RGB_led_array[led_num].led_num_pair;
+ 296              		.loc 1 72 0
+ 297 0012 FB1D     		add	r3, r7, #7
+ 298 0014 1A78     		ldrb	r2, [r3]
+ 299 0016 0E23     		mov	r3, #14
+ 300 0018 F918     		add	r1, r7, r3
+ 301 001a 3F48     		ldr	r0, .L14
+ 302 001c 131C     		mov	r3, r2
+ 303 001e 9B00     		lsl	r3, r3, #2
+ 304 0020 9B18     		add	r3, r3, r2
+ 305 0022 9B00     		lsl	r3, r3, #2
+ 306 0024 C318     		add	r3, r0, r3
+ 307 0026 5B78     		ldrb	r3, [r3, #1]
+ 308 0028 0B70     		strb	r3, [r1]
+  73:.\LED.c       ****     uint8 brightness_hex;
+  74:.\LED.c       ****     uint8 led_current_digit;
+  75:.\LED.c       ****   
+  76:.\LED.c       ****     if(led_num_pair == 0){
+ 309              		.loc 1 76 0
+ 310 002a 0E23     		mov	r3, #14
+ 311 002c FB18     		add	r3, r7, r3
+ 312 002e 1B78     		ldrb	r3, [r3]
+ 313 0030 002B     		cmp	r3, #0
+ 314 0032 23D1     		bne	.L12
+  77:.\LED.c       ****         led_current_digit = RGB_led_array[led_num].current_digit;
+ 315              		.loc 1 77 0
+ 316 0034 FB1D     		add	r3, r7, #7
+ 317 0036 1A78     		ldrb	r2, [r3]
+ 318 0038 0D23     		mov	r3, #13
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 8
+
+
+ 319 003a F918     		add	r1, r7, r3
+ 320 003c 3648     		ldr	r0, .L14
+ 321 003e 131C     		mov	r3, r2
+ 322 0040 9B00     		lsl	r3, r3, #2
+ 323 0042 9B18     		add	r3, r3, r2
+ 324 0044 9B00     		lsl	r3, r3, #2
+ 325 0046 C318     		add	r3, r0, r3
+ 326 0048 0833     		add	r3, r3, #8
+ 327 004a 5B79     		ldrb	r3, [r3, #5]
+ 328 004c 0B70     		strb	r3, [r1]
+  78:.\LED.c       ****         brightness_hex = led_current_digit * brightness;
+ 329              		.loc 1 78 0
+ 330 004e 0F23     		mov	r3, #15
+ 331 0050 FB18     		add	r3, r7, r3
+ 332 0052 0D22     		mov	r2, #13
+ 333 0054 BA18     		add	r2, r7, r2
+ 334 0056 B91D     		add	r1, r7, #6
+ 335 0058 1278     		ldrb	r2, [r2]
+ 336 005a 0978     		ldrb	r1, [r1]
+ 337 005c 4A43     		mul	r2, r1
+ 338 005e 1A70     		strb	r2, [r3]
+  79:.\LED.c       ****         RGB_led_array[led_num].brightness = brightness_hex;
+ 339              		.loc 1 79 0
+ 340 0060 FB1D     		add	r3, r7, #7
+ 341 0062 1A78     		ldrb	r2, [r3]
+ 342 0064 2C49     		ldr	r1, .L14
+ 343 0066 131C     		mov	r3, r2
+ 344 0068 9B00     		lsl	r3, r3, #2
+ 345 006a 9B18     		add	r3, r3, r2
+ 346 006c 9B00     		lsl	r3, r3, #2
+ 347 006e CB18     		add	r3, r1, r3
+ 348 0070 0833     		add	r3, r3, #8
+ 349 0072 0F22     		mov	r2, #15
+ 350 0074 BA18     		add	r2, r7, r2
+ 351 0076 1278     		ldrb	r2, [r2]
+ 352 0078 9A71     		strb	r2, [r3, #6]
+ 353 007a 2FE0     		b	.L13
+ 354              	.L12:
+  80:.\LED.c       ****     } else {
+  81:.\LED.c       ****         led_current_digit = RGB_led_array[led_num].current_digit;
+ 355              		.loc 1 81 0
+ 356 007c FB1D     		add	r3, r7, #7
+ 357 007e 1A78     		ldrb	r2, [r3]
+ 358 0080 0D23     		mov	r3, #13
+ 359 0082 F918     		add	r1, r7, r3
+ 360 0084 2448     		ldr	r0, .L14
+ 361 0086 131C     		mov	r3, r2
+ 362 0088 9B00     		lsl	r3, r3, #2
+ 363 008a 9B18     		add	r3, r3, r2
+ 364 008c 9B00     		lsl	r3, r3, #2
+ 365 008e C318     		add	r3, r0, r3
+ 366 0090 0833     		add	r3, r3, #8
+ 367 0092 5B79     		ldrb	r3, [r3, #5]
+ 368 0094 0B70     		strb	r3, [r1]
+  82:.\LED.c       ****         brightness_hex = led_current_digit * brightness + RGB_led_array[led_num_pair].brightness;
+ 369              		.loc 1 82 0
+ 370 0096 0D23     		mov	r3, #13
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 9
+
+
+ 371 0098 FB18     		add	r3, r7, r3
+ 372 009a BA1D     		add	r2, r7, #6
+ 373 009c 1B78     		ldrb	r3, [r3]
+ 374 009e 1278     		ldrb	r2, [r2]
+ 375 00a0 5343     		mul	r3, r2
+ 376 00a2 D9B2     		uxtb	r1, r3
+ 377 00a4 0E23     		mov	r3, #14
+ 378 00a6 FB18     		add	r3, r7, r3
+ 379 00a8 1A78     		ldrb	r2, [r3]
+ 380 00aa 1B48     		ldr	r0, .L14
+ 381 00ac 131C     		mov	r3, r2
+ 382 00ae 9B00     		lsl	r3, r3, #2
+ 383 00b0 9B18     		add	r3, r3, r2
+ 384 00b2 9B00     		lsl	r3, r3, #2
+ 385 00b4 C318     		add	r3, r0, r3
+ 386 00b6 0833     		add	r3, r3, #8
+ 387 00b8 9A79     		ldrb	r2, [r3, #6]
+ 388 00ba 0F23     		mov	r3, #15
+ 389 00bc FB18     		add	r3, r7, r3
+ 390 00be 8A18     		add	r2, r1, r2
+ 391 00c0 1A70     		strb	r2, [r3]
+  83:.\LED.c       ****         RGB_led_array[led_num].brightness = brightness_hex;
+ 392              		.loc 1 83 0
+ 393 00c2 FB1D     		add	r3, r7, #7
+ 394 00c4 1A78     		ldrb	r2, [r3]
+ 395 00c6 1449     		ldr	r1, .L14
+ 396 00c8 131C     		mov	r3, r2
+ 397 00ca 9B00     		lsl	r3, r3, #2
+ 398 00cc 9B18     		add	r3, r3, r2
+ 399 00ce 9B00     		lsl	r3, r3, #2
+ 400 00d0 CB18     		add	r3, r1, r3
+ 401 00d2 0833     		add	r3, r3, #8
+ 402 00d4 0F22     		mov	r2, #15
+ 403 00d6 BA18     		add	r2, r7, r2
+ 404 00d8 1278     		ldrb	r2, [r2]
+ 405 00da 9A71     		strb	r2, [r3, #6]
+ 406              	.L13:
+  84:.\LED.c       ****     }
+  85:.\LED.c       ****     uint8 cmd[2];
+  86:.\LED.c       ****     cmd[0] = RGB_led_array[led_num].current_reg;
+ 407              		.loc 1 86 0
+ 408 00dc FB1D     		add	r3, r7, #7
+ 409 00de 1A78     		ldrb	r2, [r3]
+ 410 00e0 0D49     		ldr	r1, .L14
+ 411 00e2 131C     		mov	r3, r2
+ 412 00e4 9B00     		lsl	r3, r3, #2
+ 413 00e6 9B18     		add	r3, r3, r2
+ 414 00e8 9B00     		lsl	r3, r3, #2
+ 415 00ea CB18     		add	r3, r1, r3
+ 416 00ec 0833     		add	r3, r3, #8
+ 417 00ee 1A79     		ldrb	r2, [r3, #4]
+ 418 00f0 0823     		mov	r3, #8
+ 419 00f2 FB18     		add	r3, r7, r3
+ 420 00f4 1A70     		strb	r2, [r3]
+  87:.\LED.c       ****     cmd[1] = brightness_hex;
+ 421              		.loc 1 87 0
+ 422 00f6 0823     		mov	r3, #8
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 10
+
+
+ 423 00f8 FB18     		add	r3, r7, r3
+ 424 00fa 0F22     		mov	r2, #15
+ 425 00fc BA18     		add	r2, r7, r2
+ 426 00fe 1278     		ldrb	r2, [r2]
+ 427 0100 5A70     		strb	r2, [r3, #1]
+  88:.\LED.c       ****     
+  89:.\LED.c       ****     I2C_write(LED_SLAVE_ADDRESS, cmd, 2);
+ 428              		.loc 1 89 0
+ 429 0102 0823     		mov	r3, #8
+ 430 0104 FB18     		add	r3, r7, r3
+ 431 0106 4420     		mov	r0, #68
+ 432 0108 191C     		mov	r1, r3
+ 433 010a 0222     		mov	r2, #2
+ 434 010c FFF7FEFF 		bl	I2C_write
+  90:.\LED.c       **** }
+ 435              		.loc 1 90 0
+ 436 0110 BD46     		mov	sp, r7
+ 437 0112 04B0     		add	sp, sp, #16
+ 438              		@ sp needed
+ 439 0114 80BD     		pop	{r7, pc}
+ 440              	.L15:
+ 441 0116 C046     		.align	2
+ 442              	.L14:
+ 443 0118 00000000 		.word	RGB_led_array
+ 444              		.cfi_endproc
+ 445              	.LFE39:
+ 446              		.size	LED_RGB_set_brightness, .-LED_RGB_set_brightness
+ 447              		.section	.text.LED_RGB_set_state,"ax",%progbits
+ 448              		.align	2
+ 449              		.global	LED_RGB_set_state
+ 450              		.code	16
+ 451              		.thumb_func
+ 452              		.type	LED_RGB_set_state, %function
+ 453              	LED_RGB_set_state:
+ 454              	.LFB40:
+  91:.\LED.c       **** 
+  92:.\LED.c       **** // Set the state of the RGB LEDs
+  93:.\LED.c       **** void LED_RGB_set_state(uint8 led_num, uint8 led_state) {
+ 455              		.loc 1 93 0
+ 456              		.cfi_startproc
+ 457 0000 80B5     		push	{r7, lr}
+ 458              		.cfi_def_cfa_offset 8
+ 459              		.cfi_offset 7, -8
+ 460              		.cfi_offset 14, -4
+ 461 0002 84B0     		sub	sp, sp, #16
+ 462              		.cfi_def_cfa_offset 24
+ 463 0004 00AF     		add	r7, sp, #0
+ 464              		.cfi_def_cfa_register 7
+ 465 0006 021C     		mov	r2, r0
+ 466 0008 FB1D     		add	r3, r7, #7
+ 467 000a 1A70     		strb	r2, [r3]
+ 468 000c BB1D     		add	r3, r7, #6
+ 469 000e 0A1C     		add	r2, r1, #0
+ 470 0010 1A70     		strb	r2, [r3]
+  94:.\LED.c       ****     uint8 cmd[2];
+  95:.\LED.c       ****     cmd[0] = RGB_led_array[led_num].led_reg;
+ 471              		.loc 1 95 0
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 11
+
+
+ 472 0012 FB1D     		add	r3, r7, #7
+ 473 0014 1A78     		ldrb	r2, [r3]
+ 474 0016 1349     		ldr	r1, .L17
+ 475 0018 131C     		mov	r3, r2
+ 476 001a 9B00     		lsl	r3, r3, #2
+ 477 001c 9B18     		add	r3, r3, r2
+ 478 001e 9B00     		lsl	r3, r3, #2
+ 479 0020 CB18     		add	r3, r1, r3
+ 480 0022 0833     		add	r3, r3, #8
+ 481 0024 9A78     		ldrb	r2, [r3, #2]
+ 482 0026 0C23     		mov	r3, #12
+ 483 0028 FB18     		add	r3, r7, r3
+ 484 002a 1A70     		strb	r2, [r3]
+  96:.\LED.c       ****     cmd[1] = led_state;
+ 485              		.loc 1 96 0
+ 486 002c 0C23     		mov	r3, #12
+ 487 002e FB18     		add	r3, r7, r3
+ 488 0030 BA1D     		add	r2, r7, #6
+ 489 0032 1278     		ldrb	r2, [r2]
+ 490 0034 5A70     		strb	r2, [r3, #1]
+  97:.\LED.c       ****     I2C_write(LED_SLAVE_ADDRESS, cmd, 2);
+ 491              		.loc 1 97 0
+ 492 0036 0C23     		mov	r3, #12
+ 493 0038 FB18     		add	r3, r7, r3
+ 494 003a 4420     		mov	r0, #68
+ 495 003c 191C     		mov	r1, r3
+ 496 003e 0222     		mov	r2, #2
+ 497 0040 FFF7FEFF 		bl	I2C_write
+  98:.\LED.c       ****     RGB_led_array[led_num].led_state = led_state;
+ 498              		.loc 1 98 0
+ 499 0044 FB1D     		add	r3, r7, #7
+ 500 0046 1A78     		ldrb	r2, [r3]
+ 501 0048 0649     		ldr	r1, .L17
+ 502 004a 131C     		mov	r3, r2
+ 503 004c 9B00     		lsl	r3, r3, #2
+ 504 004e 9B18     		add	r3, r3, r2
+ 505 0050 9B00     		lsl	r3, r3, #2
+ 506 0052 CB18     		add	r3, r1, r3
+ 507 0054 0833     		add	r3, r3, #8
+ 508 0056 BA1D     		add	r2, r7, #6
+ 509 0058 1278     		ldrb	r2, [r2]
+ 510 005a DA71     		strb	r2, [r3, #7]
+  99:.\LED.c       **** }
+ 511              		.loc 1 99 0
+ 512 005c BD46     		mov	sp, r7
+ 513 005e 04B0     		add	sp, sp, #16
+ 514              		@ sp needed
+ 515 0060 80BD     		pop	{r7, pc}
+ 516              	.L18:
+ 517 0062 C046     		.align	2
+ 518              	.L17:
+ 519 0064 00000000 		.word	RGB_led_array
+ 520              		.cfi_endproc
+ 521              	.LFE40:
+ 522              		.size	LED_RGB_set_state, .-LED_RGB_set_state
+ 523              		.section	.text.LED_get_current_pattern,"ax",%progbits
+ 524              		.align	2
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 12
+
+
+ 525              		.global	LED_get_current_pattern
+ 526              		.code	16
+ 527              		.thumb_func
+ 528              		.type	LED_get_current_pattern, %function
+ 529              	LED_get_current_pattern:
+ 530              	.LFB41:
+ 100:.\LED.c       **** 
+ 101:.\LED.c       **** // Get the current LED pattern
+ 102:.\LED.c       **** uint8 LED_get_current_pattern() {
+ 531              		.loc 1 102 0
+ 532              		.cfi_startproc
+ 533 0000 80B5     		push	{r7, lr}
+ 534              		.cfi_def_cfa_offset 8
+ 535              		.cfi_offset 7, -8
+ 536              		.cfi_offset 14, -4
+ 537 0002 00AF     		add	r7, sp, #0
+ 538              		.cfi_def_cfa_register 7
+ 103:.\LED.c       ****   return led_pattern;
+ 539              		.loc 1 103 0
+ 540 0004 024B     		ldr	r3, .L21
+ 541 0006 1B78     		ldrb	r3, [r3]
+ 104:.\LED.c       **** }
+ 542              		.loc 1 104 0
+ 543 0008 181C     		mov	r0, r3
+ 544 000a BD46     		mov	sp, r7
+ 545              		@ sp needed
+ 546 000c 80BD     		pop	{r7, pc}
+ 547              	.L22:
+ 548 000e C046     		.align	2
+ 549              	.L21:
+ 550 0010 00000000 		.word	led_pattern
+ 551              		.cfi_endproc
+ 552              	.LFE41:
+ 553              		.size	LED_get_current_pattern, .-LED_get_current_pattern
+ 554              		.section	.text.LED_toggle_and_dark,"ax",%progbits
+ 555              		.align	2
+ 556              		.global	LED_toggle_and_dark
+ 557              		.code	16
+ 558              		.thumb_func
+ 559              		.type	LED_toggle_and_dark, %function
+ 560              	LED_toggle_and_dark:
+ 561              	.LFB42:
+ 105:.\LED.c       **** 
+ 106:.\LED.c       **** // Toggle LEDs
+ 107:.\LED.c       **** void LED_toggle_and_dark(void) {
+ 562              		.loc 1 107 0
+ 563              		.cfi_startproc
+ 564 0000 80B5     		push	{r7, lr}
+ 565              		.cfi_def_cfa_offset 8
+ 566              		.cfi_offset 7, -8
+ 567              		.cfi_offset 14, -4
+ 568 0002 00AF     		add	r7, sp, #0
+ 569              		.cfi_def_cfa_register 7
+ 108:.\LED.c       ****     if (led_pattern == 0) {
+ 570              		.loc 1 108 0
+ 571 0004 164B     		ldr	r3, .L27
+ 572 0006 1B78     		ldrb	r3, [r3]
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 13
+
+
+ 573 0008 002B     		cmp	r3, #0
+ 574 000a 0BD1     		bne	.L24
+ 109:.\LED.c       ****         LED_set_state(LED1, ON);
+ 575              		.loc 1 109 0
+ 576 000c 0020     		mov	r0, #0
+ 577 000e 0121     		mov	r1, #1
+ 578 0010 FFF7FEFF 		bl	LED_set_state
+ 110:.\LED.c       ****         LED_set_state(LED2, OFF);
+ 579              		.loc 1 110 0
+ 580 0014 0120     		mov	r0, #1
+ 581 0016 0021     		mov	r1, #0
+ 582 0018 FFF7FEFF 		bl	LED_set_state
+ 111:.\LED.c       ****         
+ 112:.\LED.c       ****         led_pattern = 1;
+ 583              		.loc 1 112 0
+ 584 001c 104B     		ldr	r3, .L27
+ 585 001e 0122     		mov	r2, #1
+ 586 0020 1A70     		strb	r2, [r3]
+ 587 0022 1AE0     		b	.L23
+ 588              	.L24:
+ 113:.\LED.c       ****     } else if (led_pattern == 1) {
+ 589              		.loc 1 113 0
+ 590 0024 0E4B     		ldr	r3, .L27
+ 591 0026 1B78     		ldrb	r3, [r3]
+ 592 0028 012B     		cmp	r3, #1
+ 593 002a 0BD1     		bne	.L26
+ 114:.\LED.c       ****         LED_set_state(LED1, OFF);
+ 594              		.loc 1 114 0
+ 595 002c 0020     		mov	r0, #0
+ 596 002e 0021     		mov	r1, #0
+ 597 0030 FFF7FEFF 		bl	LED_set_state
+ 115:.\LED.c       ****         LED_set_state(LED2, ON);
+ 598              		.loc 1 115 0
+ 599 0034 0120     		mov	r0, #1
+ 600 0036 0121     		mov	r1, #1
+ 601 0038 FFF7FEFF 		bl	LED_set_state
+ 116:.\LED.c       ****         
+ 117:.\LED.c       ****         led_pattern = 2;
+ 602              		.loc 1 117 0
+ 603 003c 084B     		ldr	r3, .L27
+ 604 003e 0222     		mov	r2, #2
+ 605 0040 1A70     		strb	r2, [r3]
+ 606 0042 0AE0     		b	.L23
+ 607              	.L26:
+ 118:.\LED.c       ****       } else {
+ 119:.\LED.c       ****         LED_set_state(LED1, OFF);
+ 608              		.loc 1 119 0
+ 609 0044 0020     		mov	r0, #0
+ 610 0046 0021     		mov	r1, #0
+ 611 0048 FFF7FEFF 		bl	LED_set_state
+ 120:.\LED.c       ****         LED_set_state(LED2, OFF);
+ 612              		.loc 1 120 0
+ 613 004c 0120     		mov	r0, #1
+ 614 004e 0021     		mov	r1, #0
+ 615 0050 FFF7FEFF 		bl	LED_set_state
+ 121:.\LED.c       ****         
+ 122:.\LED.c       ****         led_pattern = 0;
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 14
+
+
+ 616              		.loc 1 122 0
+ 617 0054 024B     		ldr	r3, .L27
+ 618 0056 0022     		mov	r2, #0
+ 619 0058 1A70     		strb	r2, [r3]
+ 620              	.L23:
+ 123:.\LED.c       ****       }
+ 124:.\LED.c       **** }
+ 621              		.loc 1 124 0
+ 622 005a BD46     		mov	sp, r7
+ 623              		@ sp needed
+ 624 005c 80BD     		pop	{r7, pc}
+ 625              	.L28:
+ 626 005e C046     		.align	2
+ 627              	.L27:
+ 628 0060 00000000 		.word	led_pattern
+ 629              		.cfi_endproc
+ 630              	.LFE42:
+ 631              		.size	LED_toggle_and_dark, .-LED_toggle_and_dark
+ 632              		.section	.text.LED_set_state,"ax",%progbits
+ 633              		.align	2
+ 634              		.global	LED_set_state
+ 635              		.code	16
+ 636              		.thumb_func
+ 637              		.type	LED_set_state, %function
+ 638              	LED_set_state:
+ 639              	.LFB43:
+ 125:.\LED.c       **** 
+ 126:.\LED.c       **** // Sets LED state
+ 127:.\LED.c       **** /*
+ 128:.\LED.c       **** * NB: We set the state twice because there are two pins that are
+ 129:.\LED.c       **** * "jumpered". In the cmd buffer, that we are writing to the LED slave
+ 130:.\LED.c       **** * address using I2C, we do not use the next address because the LED
+ 131:.\LED.c       **** * driver auto-increments this address.
+ 132:.\LED.c       **** */
+ 133:.\LED.c       **** void LED_set_state(uint8 led_num, uint8 led_state) {
+ 640              		.loc 1 133 0
+ 641              		.cfi_startproc
+ 642 0000 80B5     		push	{r7, lr}
+ 643              		.cfi_def_cfa_offset 8
+ 644              		.cfi_offset 7, -8
+ 645              		.cfi_offset 14, -4
+ 646 0002 84B0     		sub	sp, sp, #16
+ 647              		.cfi_def_cfa_offset 24
+ 648 0004 00AF     		add	r7, sp, #0
+ 649              		.cfi_def_cfa_register 7
+ 650 0006 021C     		mov	r2, r0
+ 651 0008 FB1D     		add	r3, r7, #7
+ 652 000a 1A70     		strb	r2, [r3]
+ 653 000c BB1D     		add	r3, r7, #6
+ 654 000e 0A1C     		add	r2, r1, #0
+ 655 0010 1A70     		strb	r2, [r3]
+ 134:.\LED.c       ****     uint8 cmd[3];
+ 135:.\LED.c       ****     cmd[0] = led_array[led_num].led_reg;
+ 656              		.loc 1 135 0
+ 657 0012 FB1D     		add	r3, r7, #7
+ 658 0014 1A78     		ldrb	r2, [r3]
+ 659 0016 1549     		ldr	r1, .L30
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 15
+
+
+ 660 0018 131C     		mov	r3, r2
+ 661 001a 9B00     		lsl	r3, r3, #2
+ 662 001c 9B18     		add	r3, r3, r2
+ 663 001e 9B00     		lsl	r3, r3, #2
+ 664 0020 CB18     		add	r3, r1, r3
+ 665 0022 0833     		add	r3, r3, #8
+ 666 0024 9A78     		ldrb	r2, [r3, #2]
+ 667 0026 0C23     		mov	r3, #12
+ 668 0028 FB18     		add	r3, r7, r3
+ 669 002a 1A70     		strb	r2, [r3]
+ 136:.\LED.c       ****     cmd[1] = led_state;
+ 670              		.loc 1 136 0
+ 671 002c 0C23     		mov	r3, #12
+ 672 002e FB18     		add	r3, r7, r3
+ 673 0030 BA1D     		add	r2, r7, #6
+ 674 0032 1278     		ldrb	r2, [r2]
+ 675 0034 5A70     		strb	r2, [r3, #1]
+ 137:.\LED.c       ****     cmd[2] = led_state;
+ 676              		.loc 1 137 0
+ 677 0036 0C23     		mov	r3, #12
+ 678 0038 FB18     		add	r3, r7, r3
+ 679 003a BA1D     		add	r2, r7, #6
+ 680 003c 1278     		ldrb	r2, [r2]
+ 681 003e 9A70     		strb	r2, [r3, #2]
+ 138:.\LED.c       ****     
+ 139:.\LED.c       ****     I2C_write(LED_SLAVE_ADDRESS, cmd, 3);
+ 682              		.loc 1 139 0
+ 683 0040 0C23     		mov	r3, #12
+ 684 0042 FB18     		add	r3, r7, r3
+ 685 0044 4420     		mov	r0, #68
+ 686 0046 191C     		mov	r1, r3
+ 687 0048 0322     		mov	r2, #3
+ 688 004a FFF7FEFF 		bl	I2C_write
+ 140:.\LED.c       ****     led_array[led_num].led_state = led_state;
+ 689              		.loc 1 140 0
+ 690 004e FB1D     		add	r3, r7, #7
+ 691 0050 1A78     		ldrb	r2, [r3]
+ 692 0052 0649     		ldr	r1, .L30
+ 693 0054 131C     		mov	r3, r2
+ 694 0056 9B00     		lsl	r3, r3, #2
+ 695 0058 9B18     		add	r3, r3, r2
+ 696 005a 9B00     		lsl	r3, r3, #2
+ 697 005c CB18     		add	r3, r1, r3
+ 698 005e 0833     		add	r3, r3, #8
+ 699 0060 BA1D     		add	r2, r7, #6
+ 700 0062 1278     		ldrb	r2, [r2]
+ 701 0064 DA71     		strb	r2, [r3, #7]
+ 141:.\LED.c       **** }
+ 702              		.loc 1 141 0
+ 703 0066 BD46     		mov	sp, r7
+ 704 0068 04B0     		add	sp, sp, #16
+ 705              		@ sp needed
+ 706 006a 80BD     		pop	{r7, pc}
+ 707              	.L31:
+ 708              		.align	2
+ 709              	.L30:
+ 710 006c 00000000 		.word	led_array
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 16
+
+
+ 711              		.cfi_endproc
+ 712              	.LFE43:
+ 713              		.size	LED_set_state, .-LED_set_state
+ 714              		.section	.rodata
+ 715              		.align	2
+ 716              	.LC8:
+ 717 0000 3636306E 		.ascii	"660nm\000"
+ 717      6D00
+ 718 0006 0000     		.align	2
+ 719              	.LC10:
+ 720 0008 3835356E 		.ascii	"855nm\000"
+ 720      6D00
+ 721 000e 0000     		.align	2
+ 722              	.LC13:
+ 723 0010 72656400 		.ascii	"red\000"
+ 724              		.align	2
+ 725              	.LC15:
+ 726 0014 67726565 		.ascii	"green\000"
+ 726      6E00
+ 727 001a 0000     		.section	.text.LED_init_params,"ax",%progbits
+ 728              		.align	2
+ 729              		.global	LED_init_params
+ 730              		.code	16
+ 731              		.thumb_func
+ 732              		.type	LED_init_params, %function
+ 733              	LED_init_params:
+ 734              	.LFB44:
+ 142:.\LED.c       **** 
+ 143:.\LED.c       **** // Setup Addresses
+ 144:.\LED.c       **** // Initialize all LEDs
+ 145:.\LED.c       **** bool LED_init_params( void ) {
+ 735              		.loc 1 145 0
+ 736              		.cfi_startproc
+ 737 0000 80B5     		push	{r7, lr}
+ 738              		.cfi_def_cfa_offset 8
+ 739              		.cfi_offset 7, -8
+ 740              		.cfi_offset 14, -4
+ 741 0002 00AF     		add	r7, sp, #0
+ 742              		.cfi_def_cfa_register 7
+ 146:.\LED.c       ****   // LED1
+ 147:.\LED.c       ****   led_array[LED1].led_num = LED1;
+ 743              		.loc 1 147 0
+ 744 0004 514B     		ldr	r3, .L34
+ 745 0006 0022     		mov	r2, #0
+ 746 0008 1A70     		strb	r2, [r3]
+ 148:.\LED.c       ****   led_array[LED1].led_name = LED1_NAME;
+ 747              		.loc 1 148 0
+ 748 000a 504B     		ldr	r3, .L34
+ 749 000c 504A     		ldr	r2, .L34+4
+ 750 000e 5A60     		str	r2, [r3, #4]
+ 149:.\LED.c       ****   led_array[LED1].port_num = 14;
+ 751              		.loc 1 149 0
+ 752 0010 4E4B     		ldr	r3, .L34
+ 753 0012 0E22     		mov	r2, #14
+ 754 0014 5A72     		strb	r2, [r3, #9]
+ 150:.\LED.c       ****   led_array[LED1].led_reg = P14_REG;
+ 755              		.loc 1 150 0
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 17
+
+
+ 756 0016 4D4B     		ldr	r3, .L34
+ 757 0018 2E22     		mov	r2, #46
+ 758 001a 9A72     		strb	r2, [r3, #10]
+ 151:.\LED.c       ****   led_array[LED1].current_reg = P14_CURR_REG;
+ 759              		.loc 1 151 0
+ 760 001c 4B4B     		ldr	r3, .L34
+ 761 001e 1722     		mov	r2, #23
+ 762 0020 1A73     		strb	r2, [r3, #12]
+ 152:.\LED.c       ****   led_array[LED1].current_digit = 0x11;
+ 763              		.loc 1 152 0
+ 764 0022 4A4B     		ldr	r3, .L34
+ 765 0024 1122     		mov	r2, #17
+ 766 0026 5A73     		strb	r2, [r3, #13]
+ 153:.\LED.c       ****   led_array[LED1].brightness = 0x00;
+ 767              		.loc 1 153 0
+ 768 0028 484B     		ldr	r3, .L34
+ 769 002a 0022     		mov	r2, #0
+ 770 002c 9A73     		strb	r2, [r3, #14]
+ 154:.\LED.c       ****   led_array[LED1].led_state = OFF;
+ 771              		.loc 1 154 0
+ 772 002e 474B     		ldr	r3, .L34
+ 773 0030 0022     		mov	r2, #0
+ 774 0032 DA73     		strb	r2, [r3, #15]
+ 155:.\LED.c       ****   led_array[LED1].on_time = 100;
+ 775              		.loc 1 155 0
+ 776 0034 454B     		ldr	r3, .L34
+ 777 0036 6422     		mov	r2, #100
+ 778 0038 1A82     		strh	r2, [r3, #16]
+ 156:.\LED.c       **** 
+ 157:.\LED.c       ****   // LED2
+ 158:.\LED.c       ****   led_array[LED2].led_num = LED2;
+ 779              		.loc 1 158 0
+ 780 003a 444B     		ldr	r3, .L34
+ 781 003c 0122     		mov	r2, #1
+ 782 003e 1A75     		strb	r2, [r3, #20]
+ 159:.\LED.c       ****   led_array[LED2].led_name = LED2_NAME;
+ 783              		.loc 1 159 0
+ 784 0040 424B     		ldr	r3, .L34
+ 785 0042 444A     		ldr	r2, .L34+8
+ 786 0044 9A61     		str	r2, [r3, #24]
+ 160:.\LED.c       ****   led_array[LED2].port_num = 12;
+ 787              		.loc 1 160 0
+ 788 0046 414B     		ldr	r3, .L34
+ 789 0048 0C22     		mov	r2, #12
+ 790 004a 5A77     		strb	r2, [r3, #29]
+ 161:.\LED.c       ****   led_array[LED2].led_reg = P12_REG;
+ 791              		.loc 1 161 0
+ 792 004c 3F4B     		ldr	r3, .L34
+ 793 004e 2C22     		mov	r2, #44
+ 794 0050 9A77     		strb	r2, [r3, #30]
+ 162:.\LED.c       ****   led_array[LED2].current_reg = P12_CURR_REG;
+ 795              		.loc 1 162 0
+ 796 0052 3E4B     		ldr	r3, .L34
+ 797 0054 2022     		mov	r2, #32
+ 798 0056 1621     		mov	r1, #22
+ 799 0058 9954     		strb	r1, [r3, r2]
+ 163:.\LED.c       ****   led_array[LED2].current_digit = 0x11;
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 18
+
+
+ 800              		.loc 1 163 0
+ 801 005a 3C4B     		ldr	r3, .L34
+ 802 005c 2122     		mov	r2, #33
+ 803 005e 1121     		mov	r1, #17
+ 804 0060 9954     		strb	r1, [r3, r2]
+ 164:.\LED.c       ****   led_array[LED2].brightness = 0x00;
+ 805              		.loc 1 164 0
+ 806 0062 3A4B     		ldr	r3, .L34
+ 807 0064 2222     		mov	r2, #34
+ 808 0066 0021     		mov	r1, #0
+ 809 0068 9954     		strb	r1, [r3, r2]
+ 165:.\LED.c       ****   led_array[LED2].led_state = OFF;
+ 810              		.loc 1 165 0
+ 811 006a 384B     		ldr	r3, .L34
+ 812 006c 2322     		mov	r2, #35
+ 813 006e 0021     		mov	r1, #0
+ 814 0070 9954     		strb	r1, [r3, r2]
+ 166:.\LED.c       ****   led_array[LED2].on_time = 100;
+ 815              		.loc 1 166 0
+ 816 0072 364B     		ldr	r3, .L34
+ 817 0074 6422     		mov	r2, #100
+ 818 0076 9A84     		strh	r2, [r3, #36]
+ 167:.\LED.c       **** 
+ 168:.\LED.c       ****   // Red LED
+ 169:.\LED.c       ****   RGB_led_array[RED_LED].led_num = RED_LED;
+ 819              		.loc 1 169 0
+ 820 0078 374B     		ldr	r3, .L34+12
+ 821 007a 0022     		mov	r2, #0
+ 822 007c 1A70     		strb	r2, [r3]
+ 170:.\LED.c       ****   RGB_led_array[RED_LED].led_num_pair = 0;
+ 823              		.loc 1 170 0
+ 824 007e 364B     		ldr	r3, .L34+12
+ 825 0080 0022     		mov	r2, #0
+ 826 0082 5A70     		strb	r2, [r3, #1]
+ 171:.\LED.c       ****   RGB_led_array[RED_LED].led_name = RED_LED_NAME;
+ 827              		.loc 1 171 0
+ 828 0084 344B     		ldr	r3, .L34+12
+ 829 0086 354A     		ldr	r2, .L34+16
+ 830 0088 5A60     		str	r2, [r3, #4]
+ 172:.\LED.c       ****   RGB_led_array[RED_LED].port_num = 18;
+ 831              		.loc 1 172 0
+ 832 008a 334B     		ldr	r3, .L34+12
+ 833 008c 1222     		mov	r2, #18
+ 834 008e 5A72     		strb	r2, [r3, #9]
+ 173:.\LED.c       ****   RGB_led_array[RED_LED].led_reg = P18_REG;
+ 835              		.loc 1 173 0
+ 836 0090 314B     		ldr	r3, .L34+12
+ 837 0092 3222     		mov	r2, #50
+ 838 0094 9A72     		strb	r2, [r3, #10]
+ 174:.\LED.c       ****   RGB_led_array[RED_LED].current_reg = P18_CURR_REG;
+ 839              		.loc 1 174 0
+ 840 0096 304B     		ldr	r3, .L34+12
+ 841 0098 1922     		mov	r2, #25
+ 842 009a 1A73     		strb	r2, [r3, #12]
+ 175:.\LED.c       ****   RGB_led_array[RED_LED].current_digit = 0x01;
+ 843              		.loc 1 175 0
+ 844 009c 2E4B     		ldr	r3, .L34+12
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 19
+
+
+ 845 009e 0122     		mov	r2, #1
+ 846 00a0 5A73     		strb	r2, [r3, #13]
+ 176:.\LED.c       ****   RGB_led_array[RED_LED].brightness = 0x00;
+ 847              		.loc 1 176 0
+ 848 00a2 2D4B     		ldr	r3, .L34+12
+ 849 00a4 0022     		mov	r2, #0
+ 850 00a6 9A73     		strb	r2, [r3, #14]
+ 177:.\LED.c       ****   RGB_led_array[RED_LED].led_state = OFF;
+ 851              		.loc 1 177 0
+ 852 00a8 2B4B     		ldr	r3, .L34+12
+ 853 00aa 0022     		mov	r2, #0
+ 854 00ac DA73     		strb	r2, [r3, #15]
+ 178:.\LED.c       ****   RGB_led_array[RED_LED].on_time = 100;
+ 855              		.loc 1 178 0
+ 856 00ae 2A4B     		ldr	r3, .L34+12
+ 857 00b0 6422     		mov	r2, #100
+ 858 00b2 1A82     		strh	r2, [r3, #16]
+ 179:.\LED.c       **** 
+ 180:.\LED.c       ****   // Green LED
+ 181:.\LED.c       ****   RGB_led_array[GREEN_LED].led_num = GREEN_LED;
+ 859              		.loc 1 181 0
+ 860 00b4 284B     		ldr	r3, .L34+12
+ 861 00b6 0122     		mov	r2, #1
+ 862 00b8 1A75     		strb	r2, [r3, #20]
+ 182:.\LED.c       ****   RGB_led_array[GREEN_LED].led_num_pair = BLUE_LED;
+ 863              		.loc 1 182 0
+ 864 00ba 274B     		ldr	r3, .L34+12
+ 865 00bc 0222     		mov	r2, #2
+ 866 00be 5A75     		strb	r2, [r3, #21]
+ 183:.\LED.c       ****   RGB_led_array[GREEN_LED].led_name = GREEN_LED_NAME;
+ 867              		.loc 1 183 0
+ 868 00c0 254B     		ldr	r3, .L34+12
+ 869 00c2 274A     		ldr	r2, .L34+20
+ 870 00c4 9A61     		str	r2, [r3, #24]
+ 184:.\LED.c       ****   RGB_led_array[GREEN_LED].port_num = 19;
+ 871              		.loc 1 184 0
+ 872 00c6 244B     		ldr	r3, .L34+12
+ 873 00c8 1322     		mov	r2, #19
+ 874 00ca 5A77     		strb	r2, [r3, #29]
+ 185:.\LED.c       ****   RGB_led_array[GREEN_LED].led_reg = P19_REG;
+ 875              		.loc 1 185 0
+ 876 00cc 224B     		ldr	r3, .L34+12
+ 877 00ce 3322     		mov	r2, #51
+ 878 00d0 9A77     		strb	r2, [r3, #30]
+ 186:.\LED.c       ****   RGB_led_array[GREEN_LED].current_reg = P19_CURR_REG;
+ 879              		.loc 1 186 0
+ 880 00d2 214B     		ldr	r3, .L34+12
+ 881 00d4 2022     		mov	r2, #32
+ 882 00d6 1921     		mov	r1, #25
+ 883 00d8 9954     		strb	r1, [r3, r2]
+ 187:.\LED.c       ****   RGB_led_array[GREEN_LED].current_digit = 0x10;
+ 884              		.loc 1 187 0
+ 885 00da 1F4B     		ldr	r3, .L34+12
+ 886 00dc 2122     		mov	r2, #33
+ 887 00de 1021     		mov	r1, #16
+ 888 00e0 9954     		strb	r1, [r3, r2]
+ 188:.\LED.c       ****   RGB_led_array[GREEN_LED].brightness = 0x00;
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 20
+
+
+ 889              		.loc 1 188 0
+ 890 00e2 1D4B     		ldr	r3, .L34+12
+ 891 00e4 2222     		mov	r2, #34
+ 892 00e6 0021     		mov	r1, #0
+ 893 00e8 9954     		strb	r1, [r3, r2]
+ 189:.\LED.c       ****   RGB_led_array[GREEN_LED].led_state = OFF;
+ 894              		.loc 1 189 0
+ 895 00ea 1B4B     		ldr	r3, .L34+12
+ 896 00ec 2322     		mov	r2, #35
+ 897 00ee 0021     		mov	r1, #0
+ 898 00f0 9954     		strb	r1, [r3, r2]
+ 190:.\LED.c       ****   RGB_led_array[GREEN_LED].on_time = 100;
+ 899              		.loc 1 190 0
+ 900 00f2 194B     		ldr	r3, .L34+12
+ 901 00f4 6422     		mov	r2, #100
+ 902 00f6 9A84     		strh	r2, [r3, #36]
+ 191:.\LED.c       **** 
+ 192:.\LED.c       ****   // Blue LED
+ 193:.\LED.c       ****   RGB_led_array[BLUE_LED].led_num = BLUE_LED;
+ 903              		.loc 1 193 0
+ 904 00f8 174B     		ldr	r3, .L34+12
+ 905 00fa 2822     		mov	r2, #40
+ 906 00fc 0221     		mov	r1, #2
+ 907 00fe 9954     		strb	r1, [r3, r2]
+ 194:.\LED.c       ****   RGB_led_array[BLUE_LED].led_num_pair = GREEN_LED;
+ 908              		.loc 1 194 0
+ 909 0100 154B     		ldr	r3, .L34+12
+ 910 0102 2922     		mov	r2, #41
+ 911 0104 0121     		mov	r1, #1
+ 912 0106 9954     		strb	r1, [r3, r2]
+ 195:.\LED.c       ****   RGB_led_array[BLUE_LED].led_name = GREEN_LED_NAME;
+ 913              		.loc 1 195 0
+ 914 0108 134B     		ldr	r3, .L34+12
+ 915 010a 154A     		ldr	r2, .L34+20
+ 916 010c DA62     		str	r2, [r3, #44]
+ 196:.\LED.c       ****   RGB_led_array[BLUE_LED].port_num = 20;
+ 917              		.loc 1 196 0
+ 918 010e 124B     		ldr	r3, .L34+12
+ 919 0110 3122     		mov	r2, #49
+ 920 0112 1421     		mov	r1, #20
+ 921 0114 9954     		strb	r1, [r3, r2]
+ 197:.\LED.c       ****   RGB_led_array[BLUE_LED].led_reg = P20_REG;
+ 922              		.loc 1 197 0
+ 923 0116 104B     		ldr	r3, .L34+12
+ 924 0118 3222     		mov	r2, #50
+ 925 011a 3421     		mov	r1, #52
+ 926 011c 9954     		strb	r1, [r3, r2]
+ 198:.\LED.c       ****   RGB_led_array[BLUE_LED].current_reg = P20_CURR_REG;
+ 927              		.loc 1 198 0
+ 928 011e 0E4B     		ldr	r3, .L34+12
+ 929 0120 3422     		mov	r2, #52
+ 930 0122 1A21     		mov	r1, #26
+ 931 0124 9954     		strb	r1, [r3, r2]
+ 199:.\LED.c       ****   RGB_led_array[BLUE_LED].current_digit = 0x01;
+ 932              		.loc 1 199 0
+ 933 0126 0C4B     		ldr	r3, .L34+12
+ 934 0128 3522     		mov	r2, #53
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 21
+
+
+ 935 012a 0121     		mov	r1, #1
+ 936 012c 9954     		strb	r1, [r3, r2]
+ 200:.\LED.c       ****   RGB_led_array[BLUE_LED].brightness = 0x00;
+ 937              		.loc 1 200 0
+ 938 012e 0A4B     		ldr	r3, .L34+12
+ 939 0130 3622     		mov	r2, #54
+ 940 0132 0021     		mov	r1, #0
+ 941 0134 9954     		strb	r1, [r3, r2]
+ 201:.\LED.c       ****   RGB_led_array[BLUE_LED].led_state = OFF;
+ 942              		.loc 1 201 0
+ 943 0136 084B     		ldr	r3, .L34+12
+ 944 0138 3722     		mov	r2, #55
+ 945 013a 0021     		mov	r1, #0
+ 946 013c 9954     		strb	r1, [r3, r2]
+ 202:.\LED.c       ****   RGB_led_array[BLUE_LED].on_time = 100;
+ 947              		.loc 1 202 0
+ 948 013e 064B     		ldr	r3, .L34+12
+ 949 0140 6422     		mov	r2, #100
+ 950 0142 1A87     		strh	r2, [r3, #56]
+ 203:.\LED.c       **** 
+ 204:.\LED.c       ****   return true;
+ 951              		.loc 1 204 0
+ 952 0144 0123     		mov	r3, #1
+ 205:.\LED.c       **** };
+ 953              		.loc 1 205 0
+ 954 0146 181C     		mov	r0, r3
+ 955 0148 BD46     		mov	sp, r7
+ 956              		@ sp needed
+ 957 014a 80BD     		pop	{r7, pc}
+ 958              	.L35:
+ 959              		.align	2
+ 960              	.L34:
+ 961 014c 00000000 		.word	led_array
+ 962 0150 00000000 		.word	.LC8
+ 963 0154 08000000 		.word	.LC10
+ 964 0158 00000000 		.word	RGB_led_array
+ 965 015c 10000000 		.word	.LC13
+ 966 0160 14000000 		.word	.LC15
+ 967              		.cfi_endproc
+ 968              	.LFE44:
+ 969              		.size	LED_init_params, .-LED_init_params
+ 970              		.section	.text.LED_all_off,"ax",%progbits
+ 971              		.align	2
+ 972              		.global	LED_all_off
+ 973              		.code	16
+ 974              		.thumb_func
+ 975              		.type	LED_all_off, %function
+ 976              	LED_all_off:
+ 977              	.LFB45:
+ 206:.\LED.c       **** 
+ 207:.\LED.c       **** void LED_all_off( void ) {
+ 978              		.loc 1 207 0
+ 979              		.cfi_startproc
+ 980 0000 80B5     		push	{r7, lr}
+ 981              		.cfi_def_cfa_offset 8
+ 982              		.cfi_offset 7, -8
+ 983              		.cfi_offset 14, -4
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 22
+
+
+ 984 0002 00AF     		add	r7, sp, #0
+ 985              		.cfi_def_cfa_register 7
+ 208:.\LED.c       ****     LED_RGB_set_state(RED_LED, OFF);
+ 986              		.loc 1 208 0
+ 987 0004 0020     		mov	r0, #0
+ 988 0006 0021     		mov	r1, #0
+ 989 0008 FFF7FEFF 		bl	LED_RGB_set_state
+ 209:.\LED.c       ****     LED_RGB_set_state(GREEN_LED, OFF);
+ 990              		.loc 1 209 0
+ 991 000c 0120     		mov	r0, #1
+ 992 000e 0021     		mov	r1, #0
+ 993 0010 FFF7FEFF 		bl	LED_RGB_set_state
+ 210:.\LED.c       ****     LED_RGB_set_state(BLUE_LED, OFF);
+ 994              		.loc 1 210 0
+ 995 0014 0220     		mov	r0, #2
+ 996 0016 0021     		mov	r1, #0
+ 997 0018 FFF7FEFF 		bl	LED_RGB_set_state
+ 211:.\LED.c       ****     LED_set_state(LED1, OFF);
+ 998              		.loc 1 211 0
+ 999 001c 0020     		mov	r0, #0
+ 1000 001e 0021     		mov	r1, #0
+ 1001 0020 FFF7FEFF 		bl	LED_set_state
+ 212:.\LED.c       ****     LED_set_state(LED2, OFF);
+ 1002              		.loc 1 212 0
+ 1003 0024 0120     		mov	r0, #1
+ 1004 0026 0021     		mov	r1, #0
+ 1005 0028 FFF7FEFF 		bl	LED_set_state
+ 213:.\LED.c       **** }
+ 1006              		.loc 1 213 0
+ 1007 002c BD46     		mov	sp, r7
+ 1008              		@ sp needed
+ 1009 002e 80BD     		pop	{r7, pc}
+ 1010              		.cfi_endproc
+ 1011              	.LFE45:
+ 1012              		.size	LED_all_off, .-LED_all_off
+ 1013              		.text
+ 1014              	.Letext0:
+ 1015              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+ 1016              		.file 3 "Generated_Source\\PSoC4/BLE_Stack.h"
+ 1017              		.file 4 "./I2C.h"
+ 1018              		.file 5 "./LED.h"
+ 1019              		.section	.debug_info,"",%progbits
+ 1020              	.Ldebug_info0:
+ 1021 0000 B7050000 		.4byte	0x5b7
+ 1022 0004 0400     		.2byte	0x4
+ 1023 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1024 000a 04       		.byte	0x4
+ 1025 000b 01       		.uleb128 0x1
+ 1026 000c C1060000 		.4byte	.LASF116
+ 1027 0010 01       		.byte	0x1
+ 1028 0011 79070000 		.4byte	.LASF117
+ 1029 0015 000A0000 		.4byte	.LASF118
+ 1030 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 1031 001d 00000000 		.4byte	0
+ 1032 0021 00000000 		.4byte	.Ldebug_line0
+ 1033 0025 02       		.uleb128 0x2
+ 1034 0026 01       		.byte	0x1
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 23
+
+
+ 1035 0027 06       		.byte	0x6
+ 1036 0028 3B050000 		.4byte	.LASF0
+ 1037 002c 02       		.uleb128 0x2
+ 1038 002d 01       		.byte	0x1
+ 1039 002e 08       		.byte	0x8
+ 1040 002f D1040000 		.4byte	.LASF1
+ 1041 0033 02       		.uleb128 0x2
+ 1042 0034 02       		.byte	0x2
+ 1043 0035 05       		.byte	0x5
+ 1044 0036 D1000000 		.4byte	.LASF2
+ 1045 003a 02       		.uleb128 0x2
+ 1046 003b 02       		.byte	0x2
+ 1047 003c 07       		.byte	0x7
+ 1048 003d 59060000 		.4byte	.LASF3
+ 1049 0041 02       		.uleb128 0x2
+ 1050 0042 04       		.byte	0x4
+ 1051 0043 05       		.byte	0x5
+ 1052 0044 31030000 		.4byte	.LASF4
+ 1053 0048 02       		.uleb128 0x2
+ 1054 0049 04       		.byte	0x4
+ 1055 004a 07       		.byte	0x7
+ 1056 004b D8050000 		.4byte	.LASF5
+ 1057 004f 02       		.uleb128 0x2
+ 1058 0050 08       		.byte	0x8
+ 1059 0051 05       		.byte	0x5
+ 1060 0052 52010000 		.4byte	.LASF6
+ 1061 0056 02       		.uleb128 0x2
+ 1062 0057 08       		.byte	0x8
+ 1063 0058 07       		.byte	0x7
+ 1064 0059 1A030000 		.4byte	.LASF7
+ 1065 005d 03       		.uleb128 0x3
+ 1066 005e 04       		.byte	0x4
+ 1067 005f 05       		.byte	0x5
+ 1068 0060 696E7400 		.ascii	"int\000"
+ 1069 0064 02       		.uleb128 0x2
+ 1070 0065 04       		.byte	0x4
+ 1071 0066 07       		.byte	0x7
+ 1072 0067 AA050000 		.4byte	.LASF8
+ 1073 006b 04       		.uleb128 0x4
+ 1074 006c 88050000 		.4byte	.LASF9
+ 1075 0070 02       		.byte	0x2
+ 1076 0071 9801     		.2byte	0x198
+ 1077 0073 2C000000 		.4byte	0x2c
+ 1078 0077 04       		.uleb128 0x4
+ 1079 0078 EE010000 		.4byte	.LASF10
+ 1080 007c 02       		.byte	0x2
+ 1081 007d 9901     		.2byte	0x199
+ 1082 007f 3A000000 		.4byte	0x3a
+ 1083 0083 02       		.uleb128 0x2
+ 1084 0084 04       		.byte	0x4
+ 1085 0085 04       		.byte	0x4
+ 1086 0086 3B000000 		.4byte	.LASF11
+ 1087 008a 02       		.uleb128 0x2
+ 1088 008b 08       		.byte	0x8
+ 1089 008c 04       		.byte	0x4
+ 1090 008d 46080000 		.4byte	.LASF12
+ 1091 0091 02       		.uleb128 0x2
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 24
+
+
+ 1092 0092 01       		.byte	0x1
+ 1093 0093 08       		.byte	0x8
+ 1094 0094 BC060000 		.4byte	.LASF13
+ 1095 0098 02       		.uleb128 0x2
+ 1096 0099 04       		.byte	0x4
+ 1097 009a 07       		.byte	0x7
+ 1098 009b 13010000 		.4byte	.LASF14
+ 1099 009f 05       		.uleb128 0x5
+ 1100 00a0 04       		.byte	0x4
+ 1101 00a1 91000000 		.4byte	0x91
+ 1102 00a5 06       		.uleb128 0x6
+ 1103 00a6 01       		.byte	0x1
+ 1104 00a7 03       		.byte	0x3
+ 1105 00a8 4201     		.2byte	0x142
+ 1106 00aa 62020000 		.4byte	0x262
+ 1107 00ae 07       		.uleb128 0x7
+ 1108 00af 6C020000 		.4byte	.LASF15
+ 1109 00b3 00       		.sleb128 0
+ 1110 00b4 07       		.uleb128 0x7
+ 1111 00b5 A6010000 		.4byte	.LASF16
+ 1112 00b9 01       		.sleb128 1
+ 1113 00ba 07       		.uleb128 0x7
+ 1114 00bb EE090000 		.4byte	.LASF17
+ 1115 00bf 02       		.sleb128 2
+ 1116 00c0 07       		.uleb128 0x7
+ 1117 00c1 B6080000 		.4byte	.LASF18
+ 1118 00c5 03       		.sleb128 3
+ 1119 00c6 07       		.uleb128 0x7
+ 1120 00c7 3D010000 		.4byte	.LASF19
+ 1121 00cb 04       		.sleb128 4
+ 1122 00cc 07       		.uleb128 0x7
+ 1123 00cd C2030000 		.4byte	.LASF20
+ 1124 00d1 05       		.sleb128 5
+ 1125 00d2 07       		.uleb128 0x7
+ 1126 00d3 55000000 		.4byte	.LASF21
+ 1127 00d7 06       		.sleb128 6
+ 1128 00d8 07       		.uleb128 0x7
+ 1129 00d9 14090000 		.4byte	.LASF22
+ 1130 00dd 20       		.sleb128 32
+ 1131 00de 07       		.uleb128 0x7
+ 1132 00df EA050000 		.4byte	.LASF23
+ 1133 00e3 21       		.sleb128 33
+ 1134 00e4 07       		.uleb128 0x7
+ 1135 00e5 17000000 		.4byte	.LASF24
+ 1136 00e9 22       		.sleb128 34
+ 1137 00ea 07       		.uleb128 0x7
+ 1138 00eb FB030000 		.4byte	.LASF25
+ 1139 00ef 23       		.sleb128 35
+ 1140 00f0 07       		.uleb128 0x7
+ 1141 00f1 8E050000 		.4byte	.LASF26
+ 1142 00f5 24       		.sleb128 36
+ 1143 00f6 07       		.uleb128 0x7
+ 1144 00f7 DB000000 		.4byte	.LASF27
+ 1145 00fb 25       		.sleb128 37
+ 1146 00fc 07       		.uleb128 0x7
+ 1147 00fd 8E080000 		.4byte	.LASF28
+ 1148 0101 26       		.sleb128 38
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 25
+
+
+ 1149 0102 07       		.uleb128 0x7
+ 1150 0103 60030000 		.4byte	.LASF29
+ 1151 0107 27       		.sleb128 39
+ 1152 0108 07       		.uleb128 0x7
+ 1153 0109 7D000000 		.4byte	.LASF30
+ 1154 010d 28       		.sleb128 40
+ 1155 010e 07       		.uleb128 0x7
+ 1156 010f DE030000 		.4byte	.LASF31
+ 1157 0113 29       		.sleb128 41
+ 1158 0114 07       		.uleb128 0x7
+ 1159 0115 6C060000 		.4byte	.LASF32
+ 1160 0119 2A       		.sleb128 42
+ 1161 011a 07       		.uleb128 0x7
+ 1162 011b E6070000 		.4byte	.LASF33
+ 1163 011f 2B       		.sleb128 43
+ 1164 0120 07       		.uleb128 0x7
+ 1165 0121 08020000 		.4byte	.LASF34
+ 1166 0125 2C       		.sleb128 44
+ 1167 0126 07       		.uleb128 0x7
+ 1168 0127 D0020000 		.4byte	.LASF35
+ 1169 012b 2D       		.sleb128 45
+ 1170 012c 07       		.uleb128 0x7
+ 1171 012d AD000000 		.4byte	.LASF36
+ 1172 0131 2E       		.sleb128 46
+ 1173 0132 07       		.uleb128 0x7
+ 1174 0133 2C0B0000 		.4byte	.LASF37
+ 1175 0137 2F       		.sleb128 47
+ 1176 0138 07       		.uleb128 0x7
+ 1177 0139 1C010000 		.4byte	.LASF38
+ 1178 013d 30       		.sleb128 48
+ 1179 013e 07       		.uleb128 0x7
+ 1180 013f 63040000 		.4byte	.LASF39
+ 1181 0143 31       		.sleb128 49
+ 1182 0144 07       		.uleb128 0x7
+ 1183 0145 F9020000 		.4byte	.LASF40
+ 1184 0149 32       		.sleb128 50
+ 1185 014a 07       		.uleb128 0x7
+ 1186 014b 95060000 		.4byte	.LASF41
+ 1187 014f 33       		.sleb128 51
+ 1188 0150 07       		.uleb128 0x7
+ 1189 0151 DF0A0000 		.4byte	.LASF42
+ 1190 0155 C000     		.sleb128 64
+ 1191 0157 07       		.uleb128 0x7
+ 1192 0158 BD050000 		.4byte	.LASF43
+ 1193 015c C100     		.sleb128 65
+ 1194 015e 07       		.uleb128 0x7
+ 1195 015f F5000000 		.4byte	.LASF44
+ 1196 0163 C200     		.sleb128 66
+ 1197 0165 07       		.uleb128 0x7
+ 1198 0166 D0010000 		.4byte	.LASF45
+ 1199 016a C300     		.sleb128 67
+ 1200 016c 07       		.uleb128 0x7
+ 1201 016d B2090000 		.4byte	.LASF46
+ 1202 0171 C400     		.sleb128 68
+ 1203 0173 07       		.uleb128 0x7
+ 1204 0174 61090000 		.4byte	.LASF47
+ 1205 0178 C500     		.sleb128 69
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 26
+
+
+ 1206 017a 07       		.uleb128 0x7
+ 1207 017b 85010000 		.4byte	.LASF48
+ 1208 017f C600     		.sleb128 70
+ 1209 0181 07       		.uleb128 0x7
+ 1210 0182 1D050000 		.4byte	.LASF49
+ 1211 0186 C700     		.sleb128 71
+ 1212 0188 07       		.uleb128 0x7
+ 1213 0189 61050000 		.4byte	.LASF50
+ 1214 018d C800     		.sleb128 72
+ 1215 018f 07       		.uleb128 0x7
+ 1216 0190 B7020000 		.4byte	.LASF51
+ 1217 0194 C900     		.sleb128 73
+ 1218 0196 07       		.uleb128 0x7
+ 1219 0197 8D040000 		.4byte	.LASF52
+ 1220 019b CA00     		.sleb128 74
+ 1221 019d 07       		.uleb128 0x7
+ 1222 019e 2C020000 		.4byte	.LASF53
+ 1223 01a2 CB00     		.sleb128 75
+ 1224 01a4 07       		.uleb128 0x7
+ 1225 01a5 47050000 		.4byte	.LASF54
+ 1226 01a9 CC00     		.sleb128 76
+ 1227 01ab 07       		.uleb128 0x7
+ 1228 01ac 6B010000 		.4byte	.LASF55
+ 1229 01b0 CD00     		.sleb128 77
+ 1230 01b2 07       		.uleb128 0x7
+ 1231 01b3 88090000 		.4byte	.LASF56
+ 1232 01b7 CE00     		.sleb128 78
+ 1233 01b9 07       		.uleb128 0x7
+ 1234 01ba DF040000 		.4byte	.LASF57
+ 1235 01be CF00     		.sleb128 79
+ 1236 01c0 07       		.uleb128 0x7
+ 1237 01c1 C00A0000 		.4byte	.LASF58
+ 1238 01c5 D000     		.sleb128 80
+ 1239 01c7 07       		.uleb128 0x7
+ 1240 01c8 C7070000 		.4byte	.LASF59
+ 1241 01cc D100     		.sleb128 81
+ 1242 01ce 07       		.uleb128 0x7
+ 1243 01cf A1030000 		.4byte	.LASF60
+ 1244 01d3 D200     		.sleb128 82
+ 1245 01d5 07       		.uleb128 0x7
+ 1246 01d6 3A030000 		.4byte	.LASF61
+ 1247 01da D300     		.sleb128 83
+ 1248 01dc 07       		.uleb128 0x7
+ 1249 01dd 4B020000 		.4byte	.LASF62
+ 1250 01e1 D400     		.sleb128 84
+ 1251 01e3 07       		.uleb128 0x7
+ 1252 01e4 F90A0000 		.4byte	.LASF63
+ 1253 01e8 D500     		.sleb128 85
+ 1254 01ea 07       		.uleb128 0x7
+ 1255 01eb 8C0A0000 		.4byte	.LASF64
+ 1256 01ef D600     		.sleb128 86
+ 1257 01f1 07       		.uleb128 0x7
+ 1258 01f2 630A0000 		.4byte	.LASF65
+ 1259 01f6 D700     		.sleb128 87
+ 1260 01f8 07       		.uleb128 0x7
+ 1261 01f9 36060000 		.4byte	.LASF66
+ 1262 01fd D800     		.sleb128 88
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 27
+
+
+ 1263 01ff 07       		.uleb128 0x7
+ 1264 0200 AB040000 		.4byte	.LASF67
+ 1265 0204 F000     		.sleb128 112
+ 1266 0206 07       		.uleb128 0x7
+ 1267 0207 EE080000 		.4byte	.LASF68
+ 1268 020b F100     		.sleb128 113
+ 1269 020d 07       		.uleb128 0x7
+ 1270 020e 4F070000 		.4byte	.LASF69
+ 1271 0212 F200     		.sleb128 114
+ 1272 0214 07       		.uleb128 0x7
+ 1273 0215 70080000 		.4byte	.LASF70
+ 1274 0219 F300     		.sleb128 115
+ 1275 021b 07       		.uleb128 0x7
+ 1276 021c 45040000 		.4byte	.LASF71
+ 1277 0220 F400     		.sleb128 116
+ 1278 0222 07       		.uleb128 0x7
+ 1279 0223 01060000 		.4byte	.LASF72
+ 1280 0227 F500     		.sleb128 117
+ 1281 0229 07       		.uleb128 0x7
+ 1282 022a 89070000 		.4byte	.LASF73
+ 1283 022e F600     		.sleb128 118
+ 1284 0230 07       		.uleb128 0x7
+ 1285 0231 CF080000 		.4byte	.LASF74
+ 1286 0235 F700     		.sleb128 119
+ 1287 0237 07       		.uleb128 0x7
+ 1288 0238 23080000 		.4byte	.LASF75
+ 1289 023c F800     		.sleb128 120
+ 1290 023e 07       		.uleb128 0x7
+ 1291 023f 4D080000 		.4byte	.LASF76
+ 1292 0243 F900     		.sleb128 121
+ 1293 0245 07       		.uleb128 0x7
+ 1294 0246 21040000 		.4byte	.LASF77
+ 1295 024a FA00     		.sleb128 122
+ 1296 024c 07       		.uleb128 0x7
+ 1297 024d 05080000 		.4byte	.LASF78
+ 1298 0251 FA01     		.sleb128 250
+ 1299 0253 07       		.uleb128 0x7
+ 1300 0254 FE040000 		.4byte	.LASF79
+ 1301 0258 FB01     		.sleb128 251
+ 1302 025a 07       		.uleb128 0x7
+ 1303 025b 550A0000 		.4byte	.LASF80
+ 1304 025f FF01     		.sleb128 255
+ 1305 0261 00       		.byte	0
+ 1306 0262 08       		.uleb128 0x8
+ 1307 0263 01       		.byte	0x1
+ 1308 0264 04       		.byte	0x4
+ 1309 0265 0E       		.byte	0xe
+ 1310 0266 77020000 		.4byte	0x277
+ 1311 026a 07       		.uleb128 0x7
+ 1312 026b B7050000 		.4byte	.LASF81
+ 1313 026f 00       		.sleb128 0
+ 1314 0270 07       		.uleb128 0x7
+ 1315 0271 5B030000 		.4byte	.LASF82
+ 1316 0275 01       		.sleb128 1
+ 1317 0276 00       		.byte	0
+ 1318 0277 09       		.uleb128 0x9
+ 1319 0278 6E000000 		.4byte	.LASF83
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 28
+
+
+ 1320 027c 04       		.byte	0x4
+ 1321 027d 0E       		.byte	0xe
+ 1322 027e 62020000 		.4byte	0x262
+ 1323 0282 08       		.uleb128 0x8
+ 1324 0283 01       		.byte	0x1
+ 1325 0284 05       		.byte	0x5
+ 1326 0285 41       		.byte	0x41
+ 1327 0286 9D020000 		.4byte	0x29d
+ 1328 028a 07       		.uleb128 0x7
+ 1329 028b 9F000000 		.4byte	.LASF84
+ 1330 028f 00       		.sleb128 0
+ 1331 0290 07       		.uleb128 0x7
+ 1332 0291 C2070000 		.4byte	.LASF85
+ 1333 0295 01       		.sleb128 1
+ 1334 0296 07       		.uleb128 0x7
+ 1335 0297 22060000 		.4byte	.LASF86
+ 1336 029b 01       		.sleb128 1
+ 1337 029c 00       		.byte	0
+ 1338 029d 0A       		.uleb128 0xa
+ 1339 029e 14       		.byte	0x14
+ 1340 029f 05       		.byte	0x5
+ 1341 02a0 47       		.byte	0x47
+ 1342 02a1 36030000 		.4byte	0x336
+ 1343 02a5 0B       		.uleb128 0xb
+ 1344 02a6 41000000 		.4byte	.LASF87
+ 1345 02aa 05       		.byte	0x5
+ 1346 02ab 48       		.byte	0x48
+ 1347 02ac 6B000000 		.4byte	0x6b
+ 1348 02b0 00       		.byte	0
+ 1349 02b1 0B       		.uleb128 0xb
+ 1350 02b2 9C020000 		.4byte	.LASF88
+ 1351 02b6 05       		.byte	0x5
+ 1352 02b7 49       		.byte	0x49
+ 1353 02b8 6B000000 		.4byte	0x6b
+ 1354 02bc 01       		.byte	0x1
+ 1355 02bd 0B       		.uleb128 0xb
+ 1356 02be 00000000 		.4byte	.LASF89
+ 1357 02c2 05       		.byte	0x5
+ 1358 02c3 4A       		.byte	0x4a
+ 1359 02c4 9F000000 		.4byte	0x9f
+ 1360 02c8 04       		.byte	0x4
+ 1361 02c9 0B       		.uleb128 0xb
+ 1362 02ca D0090000 		.4byte	.LASF90
+ 1363 02ce 05       		.byte	0x5
+ 1364 02cf 4B       		.byte	0x4b
+ 1365 02d0 6B000000 		.4byte	0x6b
+ 1366 02d4 08       		.byte	0x8
+ 1367 02d5 0B       		.uleb128 0xb
+ 1368 02d6 A9020000 		.4byte	.LASF91
+ 1369 02da 05       		.byte	0x5
+ 1370 02db 4C       		.byte	0x4c
+ 1371 02dc 6B000000 		.4byte	0x6b
+ 1372 02e0 09       		.byte	0x9
+ 1373 02e1 0B       		.uleb128 0xb
+ 1374 02e2 88020000 		.4byte	.LASF92
+ 1375 02e6 05       		.byte	0x5
+ 1376 02e7 4D       		.byte	0x4d
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 29
+
+
+ 1377 02e8 6B000000 		.4byte	0x6b
+ 1378 02ec 0A       		.byte	0xa
+ 1379 02ed 0B       		.uleb128 0xb
+ 1380 02ee A4000000 		.4byte	.LASF93
+ 1381 02f2 05       		.byte	0x5
+ 1382 02f3 4E       		.byte	0x4e
+ 1383 02f4 6B000000 		.4byte	0x6b
+ 1384 02f8 0B       		.byte	0xb
+ 1385 02f9 0B       		.uleb128 0xb
+ 1386 02fa A6090000 		.4byte	.LASF94
+ 1387 02fe 05       		.byte	0x5
+ 1388 02ff 4F       		.byte	0x4f
+ 1389 0300 6B000000 		.4byte	0x6b
+ 1390 0304 0C       		.byte	0xc
+ 1391 0305 0B       		.uleb128 0xb
+ 1392 0306 7F030000 		.4byte	.LASF95
+ 1393 030a 05       		.byte	0x5
+ 1394 030b 50       		.byte	0x50
+ 1395 030c 6B000000 		.4byte	0x6b
+ 1396 0310 0D       		.byte	0xd
+ 1397 0311 0B       		.uleb128 0xb
+ 1398 0312 2B060000 		.4byte	.LASF96
+ 1399 0316 05       		.byte	0x5
+ 1400 0317 51       		.byte	0x51
+ 1401 0318 6B000000 		.4byte	0x6b
+ 1402 031c 0E       		.byte	0xe
+ 1403 031d 0B       		.uleb128 0xb
+ 1404 031e 38090000 		.4byte	.LASF97
+ 1405 0322 05       		.byte	0x5
+ 1406 0323 52       		.byte	0x52
+ 1407 0324 77020000 		.4byte	0x277
+ 1408 0328 0F       		.byte	0xf
+ 1409 0329 0B       		.uleb128 0xb
+ 1410 032a 81070000 		.4byte	.LASF98
+ 1411 032e 05       		.byte	0x5
+ 1412 032f 53       		.byte	0x53
+ 1413 0330 77000000 		.4byte	0x77
+ 1414 0334 10       		.byte	0x10
+ 1415 0335 00       		.byte	0
+ 1416 0336 0C       		.uleb128 0xc
+ 1417 0337 4C656400 		.ascii	"Led\000"
+ 1418 033b 05       		.byte	0x5
+ 1419 033c 54       		.byte	0x54
+ 1420 033d 9D020000 		.4byte	0x29d
+ 1421 0341 0D       		.uleb128 0xd
+ 1422 0342 42090000 		.4byte	.LASF119
+ 1423 0346 01       		.byte	0x1
+ 1424 0347 0F       		.byte	0xf
+ 1425 0348 00000000 		.4byte	.LFB37
+ 1426 034c F4000000 		.4byte	.LFE37-.LFB37
+ 1427 0350 01       		.uleb128 0x1
+ 1428 0351 9C       		.byte	0x9c
+ 1429 0352 C1030000 		.4byte	0x3c1
+ 1430 0356 0E       		.uleb128 0xe
+ 1431 0357 83020000 		.4byte	.LASF99
+ 1432 035b 01       		.byte	0x1
+ 1433 035c 10       		.byte	0x10
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 30
+
+
+ 1434 035d C1030000 		.4byte	0x3c1
+ 1435 0361 02       		.uleb128 0x2
+ 1436 0362 91       		.byte	0x91
+ 1437 0363 6C       		.sleb128 -20
+ 1438 0364 0E       		.uleb128 0xe
+ 1439 0365 B2020000 		.4byte	.LASF100
+ 1440 0369 01       		.byte	0x1
+ 1441 036a 17       		.byte	0x17
+ 1442 036b D1030000 		.4byte	0x3d1
+ 1443 036f 02       		.uleb128 0x2
+ 1444 0370 91       		.byte	0x91
+ 1445 0371 64       		.sleb128 -28
+ 1446 0372 0F       		.uleb128 0xf
+ 1447 0373 63747200 		.ascii	"ctr\000"
+ 1448 0377 01       		.byte	0x1
+ 1449 0378 23       		.byte	0x23
+ 1450 0379 5D000000 		.4byte	0x5d
+ 1451 037d 02       		.uleb128 0x2
+ 1452 037e 91       		.byte	0x91
+ 1453 037f 74       		.sleb128 -12
+ 1454 0380 0F       		.uleb128 0xf
+ 1455 0381 6900     		.ascii	"i\000"
+ 1456 0383 01       		.byte	0x1
+ 1457 0384 2E       		.byte	0x2e
+ 1458 0385 5D000000 		.4byte	0x5d
+ 1459 0389 02       		.uleb128 0x2
+ 1460 038a 91       		.byte	0x91
+ 1461 038b 70       		.sleb128 -16
+ 1462 038c 10       		.uleb128 0x10
+ 1463 038d 7C000000 		.4byte	.LBB2
+ 1464 0391 24000000 		.4byte	.LBE2-.LBB2
+ 1465 0395 A8030000 		.4byte	0x3a8
+ 1466 0399 0E       		.uleb128 0xe
+ 1467 039a 87040000 		.4byte	.LASF101
+ 1468 039e 01       		.byte	0x1
+ 1469 039f 26       		.byte	0x26
+ 1470 03a0 C1030000 		.4byte	0x3c1
+ 1471 03a4 02       		.uleb128 0x2
+ 1472 03a5 91       		.byte	0x91
+ 1473 03a6 60       		.sleb128 -32
+ 1474 03a7 00       		.byte	0
+ 1475 03a8 11       		.uleb128 0x11
+ 1476 03a9 B6000000 		.4byte	.LBB3
+ 1477 03ad 1E000000 		.4byte	.LBE3-.LBB3
+ 1478 03b1 0E       		.uleb128 0xe
+ 1479 03b2 60010000 		.4byte	.LASF102
+ 1480 03b6 01       		.byte	0x1
+ 1481 03b7 33       		.byte	0x33
+ 1482 03b8 C1030000 		.4byte	0x3c1
+ 1483 03bc 02       		.uleb128 0x2
+ 1484 03bd 91       		.byte	0x91
+ 1485 03be 5C       		.sleb128 -36
+ 1486 03bf 00       		.byte	0
+ 1487 03c0 00       		.byte	0
+ 1488 03c1 12       		.uleb128 0x12
+ 1489 03c2 6B000000 		.4byte	0x6b
+ 1490 03c6 D1030000 		.4byte	0x3d1
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 31
+
+
+ 1491 03ca 13       		.uleb128 0x13
+ 1492 03cb 98000000 		.4byte	0x98
+ 1493 03cf 01       		.byte	0x1
+ 1494 03d0 00       		.byte	0
+ 1495 03d1 12       		.uleb128 0x12
+ 1496 03d2 6B000000 		.4byte	0x6b
+ 1497 03d6 E1030000 		.4byte	0x3e1
+ 1498 03da 13       		.uleb128 0x13
+ 1499 03db 98000000 		.4byte	0x98
+ 1500 03df 07       		.byte	0x7
+ 1501 03e0 00       		.byte	0
+ 1502 03e1 14       		.uleb128 0x14
+ 1503 03e2 F5010000 		.4byte	.LASF103
+ 1504 03e6 01       		.byte	0x1
+ 1505 03e7 3E       		.byte	0x3e
+ 1506 03e8 00000000 		.4byte	.LFB38
+ 1507 03ec 68000000 		.4byte	.LFE38-.LFB38
+ 1508 03f0 01       		.uleb128 0x1
+ 1509 03f1 9C       		.byte	0x9c
+ 1510 03f2 21040000 		.4byte	0x421
+ 1511 03f6 15       		.uleb128 0x15
+ 1512 03f7 41000000 		.4byte	.LASF87
+ 1513 03fb 01       		.byte	0x1
+ 1514 03fc 3E       		.byte	0x3e
+ 1515 03fd 6B000000 		.4byte	0x6b
+ 1516 0401 02       		.uleb128 0x2
+ 1517 0402 91       		.byte	0x91
+ 1518 0403 6F       		.sleb128 -17
+ 1519 0404 15       		.uleb128 0x15
+ 1520 0405 2B060000 		.4byte	.LASF96
+ 1521 0409 01       		.byte	0x1
+ 1522 040a 3E       		.byte	0x3e
+ 1523 040b 6B000000 		.4byte	0x6b
+ 1524 040f 02       		.uleb128 0x2
+ 1525 0410 91       		.byte	0x91
+ 1526 0411 6E       		.sleb128 -18
+ 1527 0412 0F       		.uleb128 0xf
+ 1528 0413 636D6400 		.ascii	"cmd\000"
+ 1529 0417 01       		.byte	0x1
+ 1530 0418 40       		.byte	0x40
+ 1531 0419 C1030000 		.4byte	0x3c1
+ 1532 041d 02       		.uleb128 0x2
+ 1533 041e 91       		.byte	0x91
+ 1534 041f 74       		.sleb128 -12
+ 1535 0420 00       		.byte	0
+ 1536 0421 14       		.uleb128 0x14
+ 1537 0422 B9010000 		.4byte	.LASF104
+ 1538 0426 01       		.byte	0x1
+ 1539 0427 47       		.byte	0x47
+ 1540 0428 00000000 		.4byte	.LFB39
+ 1541 042c 1C010000 		.4byte	.LFE39-.LFB39
+ 1542 0430 01       		.uleb128 0x1
+ 1543 0431 9C       		.byte	0x9c
+ 1544 0432 8B040000 		.4byte	0x48b
+ 1545 0436 15       		.uleb128 0x15
+ 1546 0437 41000000 		.4byte	.LASF87
+ 1547 043b 01       		.byte	0x1
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 32
+
+
+ 1548 043c 47       		.byte	0x47
+ 1549 043d 6B000000 		.4byte	0x6b
+ 1550 0441 02       		.uleb128 0x2
+ 1551 0442 91       		.byte	0x91
+ 1552 0443 6F       		.sleb128 -17
+ 1553 0444 15       		.uleb128 0x15
+ 1554 0445 2B060000 		.4byte	.LASF96
+ 1555 0449 01       		.byte	0x1
+ 1556 044a 47       		.byte	0x47
+ 1557 044b 6B000000 		.4byte	0x6b
+ 1558 044f 02       		.uleb128 0x2
+ 1559 0450 91       		.byte	0x91
+ 1560 0451 6E       		.sleb128 -18
+ 1561 0452 0E       		.uleb128 0xe
+ 1562 0453 9C020000 		.4byte	.LASF88
+ 1563 0457 01       		.byte	0x1
+ 1564 0458 48       		.byte	0x48
+ 1565 0459 6B000000 		.4byte	0x6b
+ 1566 045d 02       		.uleb128 0x2
+ 1567 045e 91       		.byte	0x91
+ 1568 045f 76       		.sleb128 -10
+ 1569 0460 0E       		.uleb128 0xe
+ 1570 0461 1D0B0000 		.4byte	.LASF105
+ 1571 0465 01       		.byte	0x1
+ 1572 0466 49       		.byte	0x49
+ 1573 0467 6B000000 		.4byte	0x6b
+ 1574 046b 02       		.uleb128 0x2
+ 1575 046c 91       		.byte	0x91
+ 1576 046d 77       		.sleb128 -9
+ 1577 046e 0E       		.uleb128 0xe
+ 1578 046f DC090000 		.4byte	.LASF106
+ 1579 0473 01       		.byte	0x1
+ 1580 0474 4A       		.byte	0x4a
+ 1581 0475 6B000000 		.4byte	0x6b
+ 1582 0479 02       		.uleb128 0x2
+ 1583 047a 91       		.byte	0x91
+ 1584 047b 75       		.sleb128 -11
+ 1585 047c 0F       		.uleb128 0xf
+ 1586 047d 636D6400 		.ascii	"cmd\000"
+ 1587 0481 01       		.byte	0x1
+ 1588 0482 55       		.byte	0x55
+ 1589 0483 C1030000 		.4byte	0x3c1
+ 1590 0487 02       		.uleb128 0x2
+ 1591 0488 91       		.byte	0x91
+ 1592 0489 70       		.sleb128 -16
+ 1593 048a 00       		.byte	0
+ 1594 048b 14       		.uleb128 0x14
+ 1595 048c AE0A0000 		.4byte	.LASF107
+ 1596 0490 01       		.byte	0x1
+ 1597 0491 5D       		.byte	0x5d
+ 1598 0492 00000000 		.4byte	.LFB40
+ 1599 0496 68000000 		.4byte	.LFE40-.LFB40
+ 1600 049a 01       		.uleb128 0x1
+ 1601 049b 9C       		.byte	0x9c
+ 1602 049c CB040000 		.4byte	0x4cb
+ 1603 04a0 15       		.uleb128 0x15
+ 1604 04a1 41000000 		.4byte	.LASF87
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 33
+
+
+ 1605 04a5 01       		.byte	0x1
+ 1606 04a6 5D       		.byte	0x5d
+ 1607 04a7 6B000000 		.4byte	0x6b
+ 1608 04ab 02       		.uleb128 0x2
+ 1609 04ac 91       		.byte	0x91
+ 1610 04ad 6F       		.sleb128 -17
+ 1611 04ae 15       		.uleb128 0x15
+ 1612 04af 38090000 		.4byte	.LASF97
+ 1613 04b3 01       		.byte	0x1
+ 1614 04b4 5D       		.byte	0x5d
+ 1615 04b5 6B000000 		.4byte	0x6b
+ 1616 04b9 02       		.uleb128 0x2
+ 1617 04ba 91       		.byte	0x91
+ 1618 04bb 6E       		.sleb128 -18
+ 1619 04bc 0F       		.uleb128 0xf
+ 1620 04bd 636D6400 		.ascii	"cmd\000"
+ 1621 04c1 01       		.byte	0x1
+ 1622 04c2 5E       		.byte	0x5e
+ 1623 04c3 C1030000 		.4byte	0x3c1
+ 1624 04c7 02       		.uleb128 0x2
+ 1625 04c8 91       		.byte	0x91
+ 1626 04c9 74       		.sleb128 -12
+ 1627 04ca 00       		.byte	0
+ 1628 04cb 16       		.uleb128 0x16
+ 1629 04cc AA070000 		.4byte	.LASF109
+ 1630 04d0 01       		.byte	0x1
+ 1631 04d1 66       		.byte	0x66
+ 1632 04d2 6B000000 		.4byte	0x6b
+ 1633 04d6 00000000 		.4byte	.LFB41
+ 1634 04da 14000000 		.4byte	.LFE41-.LFB41
+ 1635 04de 01       		.uleb128 0x1
+ 1636 04df 9C       		.byte	0x9c
+ 1637 04e0 17       		.uleb128 0x17
+ 1638 04e1 8D030000 		.4byte	.LASF111
+ 1639 04e5 01       		.byte	0x1
+ 1640 04e6 6B       		.byte	0x6b
+ 1641 04e7 00000000 		.4byte	.LFB42
+ 1642 04eb 64000000 		.4byte	.LFE42-.LFB42
+ 1643 04ef 01       		.uleb128 0x1
+ 1644 04f0 9C       		.byte	0x9c
+ 1645 04f1 14       		.uleb128 0x14
+ 1646 04f2 09000000 		.4byte	.LASF108
+ 1647 04f6 01       		.byte	0x1
+ 1648 04f7 85       		.byte	0x85
+ 1649 04f8 00000000 		.4byte	.LFB43
+ 1650 04fc 70000000 		.4byte	.LFE43-.LFB43
+ 1651 0500 01       		.uleb128 0x1
+ 1652 0501 9C       		.byte	0x9c
+ 1653 0502 31050000 		.4byte	0x531
+ 1654 0506 15       		.uleb128 0x15
+ 1655 0507 41000000 		.4byte	.LASF87
+ 1656 050b 01       		.byte	0x1
+ 1657 050c 85       		.byte	0x85
+ 1658 050d 6B000000 		.4byte	0x6b
+ 1659 0511 02       		.uleb128 0x2
+ 1660 0512 91       		.byte	0x91
+ 1661 0513 6F       		.sleb128 -17
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 34
+
+
+ 1662 0514 15       		.uleb128 0x15
+ 1663 0515 38090000 		.4byte	.LASF97
+ 1664 0519 01       		.byte	0x1
+ 1665 051a 85       		.byte	0x85
+ 1666 051b 6B000000 		.4byte	0x6b
+ 1667 051f 02       		.uleb128 0x2
+ 1668 0520 91       		.byte	0x91
+ 1669 0521 6E       		.sleb128 -18
+ 1670 0522 0F       		.uleb128 0xf
+ 1671 0523 636D6400 		.ascii	"cmd\000"
+ 1672 0527 01       		.byte	0x1
+ 1673 0528 86       		.byte	0x86
+ 1674 0529 31050000 		.4byte	0x531
+ 1675 052d 02       		.uleb128 0x2
+ 1676 052e 91       		.byte	0x91
+ 1677 052f 74       		.sleb128 -12
+ 1678 0530 00       		.byte	0
+ 1679 0531 12       		.uleb128 0x12
+ 1680 0532 6B000000 		.4byte	0x6b
+ 1681 0536 41050000 		.4byte	0x541
+ 1682 053a 13       		.uleb128 0x13
+ 1683 053b 98000000 		.4byte	0x98
+ 1684 053f 02       		.byte	0x2
+ 1685 0540 00       		.byte	0
+ 1686 0541 16       		.uleb128 0x16
+ 1687 0542 51090000 		.4byte	.LASF110
+ 1688 0546 01       		.byte	0x1
+ 1689 0547 91       		.byte	0x91
+ 1690 0548 77020000 		.4byte	0x277
+ 1691 054c 00000000 		.4byte	.LFB44
+ 1692 0550 64010000 		.4byte	.LFE44-.LFB44
+ 1693 0554 01       		.uleb128 0x1
+ 1694 0555 9C       		.byte	0x9c
+ 1695 0556 17       		.uleb128 0x17
+ 1696 0557 90020000 		.4byte	.LASF112
+ 1697 055b 01       		.byte	0x1
+ 1698 055c CF       		.byte	0xcf
+ 1699 055d 00000000 		.4byte	.LFB45
+ 1700 0561 30000000 		.4byte	.LFE45-.LFB45
+ 1701 0565 01       		.uleb128 0x1
+ 1702 0566 9C       		.byte	0x9c
+ 1703 0567 12       		.uleb128 0x12
+ 1704 0568 36030000 		.4byte	0x336
+ 1705 056c 77050000 		.4byte	0x577
+ 1706 0570 13       		.uleb128 0x13
+ 1707 0571 98000000 		.4byte	0x98
+ 1708 0575 01       		.byte	0x1
+ 1709 0576 00       		.byte	0
+ 1710 0577 18       		.uleb128 0x18
+ 1711 0578 73000000 		.4byte	.LASF113
+ 1712 057c 05       		.byte	0x5
+ 1713 057d 56       		.byte	0x56
+ 1714 057e 67050000 		.4byte	0x567
+ 1715 0582 05       		.uleb128 0x5
+ 1716 0583 03       		.byte	0x3
+ 1717 0584 00000000 		.4byte	led_array
+ 1718 0588 12       		.uleb128 0x12
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 35
+
+
+ 1719 0589 36030000 		.4byte	0x336
+ 1720 058d 98050000 		.4byte	0x598
+ 1721 0591 13       		.uleb128 0x13
+ 1722 0592 98000000 		.4byte	0x98
+ 1723 0596 02       		.byte	0x2
+ 1724 0597 00       		.byte	0
+ 1725 0598 18       		.uleb128 0x18
+ 1726 0599 6B070000 		.4byte	.LASF114
+ 1727 059d 05       		.byte	0x5
+ 1728 059e 57       		.byte	0x57
+ 1729 059f 88050000 		.4byte	0x588
+ 1730 05a3 05       		.uleb128 0x5
+ 1731 05a4 03       		.byte	0x3
+ 1732 05a5 00000000 		.4byte	RGB_led_array
+ 1733 05a9 18       		.uleb128 0x18
+ 1734 05aa 49000000 		.4byte	.LASF115
+ 1735 05ae 05       		.byte	0x5
+ 1736 05af 59       		.byte	0x59
+ 1737 05b0 6B000000 		.4byte	0x6b
+ 1738 05b4 05       		.uleb128 0x5
+ 1739 05b5 03       		.byte	0x3
+ 1740 05b6 00000000 		.4byte	led_pattern
+ 1741 05ba 00       		.byte	0
+ 1742              		.section	.debug_abbrev,"",%progbits
+ 1743              	.Ldebug_abbrev0:
+ 1744 0000 01       		.uleb128 0x1
+ 1745 0001 11       		.uleb128 0x11
+ 1746 0002 01       		.byte	0x1
+ 1747 0003 25       		.uleb128 0x25
+ 1748 0004 0E       		.uleb128 0xe
+ 1749 0005 13       		.uleb128 0x13
+ 1750 0006 0B       		.uleb128 0xb
+ 1751 0007 03       		.uleb128 0x3
+ 1752 0008 0E       		.uleb128 0xe
+ 1753 0009 1B       		.uleb128 0x1b
+ 1754 000a 0E       		.uleb128 0xe
+ 1755 000b 55       		.uleb128 0x55
+ 1756 000c 17       		.uleb128 0x17
+ 1757 000d 11       		.uleb128 0x11
+ 1758 000e 01       		.uleb128 0x1
+ 1759 000f 10       		.uleb128 0x10
+ 1760 0010 17       		.uleb128 0x17
+ 1761 0011 00       		.byte	0
+ 1762 0012 00       		.byte	0
+ 1763 0013 02       		.uleb128 0x2
+ 1764 0014 24       		.uleb128 0x24
+ 1765 0015 00       		.byte	0
+ 1766 0016 0B       		.uleb128 0xb
+ 1767 0017 0B       		.uleb128 0xb
+ 1768 0018 3E       		.uleb128 0x3e
+ 1769 0019 0B       		.uleb128 0xb
+ 1770 001a 03       		.uleb128 0x3
+ 1771 001b 0E       		.uleb128 0xe
+ 1772 001c 00       		.byte	0
+ 1773 001d 00       		.byte	0
+ 1774 001e 03       		.uleb128 0x3
+ 1775 001f 24       		.uleb128 0x24
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 36
+
+
+ 1776 0020 00       		.byte	0
+ 1777 0021 0B       		.uleb128 0xb
+ 1778 0022 0B       		.uleb128 0xb
+ 1779 0023 3E       		.uleb128 0x3e
+ 1780 0024 0B       		.uleb128 0xb
+ 1781 0025 03       		.uleb128 0x3
+ 1782 0026 08       		.uleb128 0x8
+ 1783 0027 00       		.byte	0
+ 1784 0028 00       		.byte	0
+ 1785 0029 04       		.uleb128 0x4
+ 1786 002a 16       		.uleb128 0x16
+ 1787 002b 00       		.byte	0
+ 1788 002c 03       		.uleb128 0x3
+ 1789 002d 0E       		.uleb128 0xe
+ 1790 002e 3A       		.uleb128 0x3a
+ 1791 002f 0B       		.uleb128 0xb
+ 1792 0030 3B       		.uleb128 0x3b
+ 1793 0031 05       		.uleb128 0x5
+ 1794 0032 49       		.uleb128 0x49
+ 1795 0033 13       		.uleb128 0x13
+ 1796 0034 00       		.byte	0
+ 1797 0035 00       		.byte	0
+ 1798 0036 05       		.uleb128 0x5
+ 1799 0037 0F       		.uleb128 0xf
+ 1800 0038 00       		.byte	0
+ 1801 0039 0B       		.uleb128 0xb
+ 1802 003a 0B       		.uleb128 0xb
+ 1803 003b 49       		.uleb128 0x49
+ 1804 003c 13       		.uleb128 0x13
+ 1805 003d 00       		.byte	0
+ 1806 003e 00       		.byte	0
+ 1807 003f 06       		.uleb128 0x6
+ 1808 0040 04       		.uleb128 0x4
+ 1809 0041 01       		.byte	0x1
+ 1810 0042 0B       		.uleb128 0xb
+ 1811 0043 0B       		.uleb128 0xb
+ 1812 0044 3A       		.uleb128 0x3a
+ 1813 0045 0B       		.uleb128 0xb
+ 1814 0046 3B       		.uleb128 0x3b
+ 1815 0047 05       		.uleb128 0x5
+ 1816 0048 01       		.uleb128 0x1
+ 1817 0049 13       		.uleb128 0x13
+ 1818 004a 00       		.byte	0
+ 1819 004b 00       		.byte	0
+ 1820 004c 07       		.uleb128 0x7
+ 1821 004d 28       		.uleb128 0x28
+ 1822 004e 00       		.byte	0
+ 1823 004f 03       		.uleb128 0x3
+ 1824 0050 0E       		.uleb128 0xe
+ 1825 0051 1C       		.uleb128 0x1c
+ 1826 0052 0D       		.uleb128 0xd
+ 1827 0053 00       		.byte	0
+ 1828 0054 00       		.byte	0
+ 1829 0055 08       		.uleb128 0x8
+ 1830 0056 04       		.uleb128 0x4
+ 1831 0057 01       		.byte	0x1
+ 1832 0058 0B       		.uleb128 0xb
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 37
+
+
+ 1833 0059 0B       		.uleb128 0xb
+ 1834 005a 3A       		.uleb128 0x3a
+ 1835 005b 0B       		.uleb128 0xb
+ 1836 005c 3B       		.uleb128 0x3b
+ 1837 005d 0B       		.uleb128 0xb
+ 1838 005e 01       		.uleb128 0x1
+ 1839 005f 13       		.uleb128 0x13
+ 1840 0060 00       		.byte	0
+ 1841 0061 00       		.byte	0
+ 1842 0062 09       		.uleb128 0x9
+ 1843 0063 16       		.uleb128 0x16
+ 1844 0064 00       		.byte	0
+ 1845 0065 03       		.uleb128 0x3
+ 1846 0066 0E       		.uleb128 0xe
+ 1847 0067 3A       		.uleb128 0x3a
+ 1848 0068 0B       		.uleb128 0xb
+ 1849 0069 3B       		.uleb128 0x3b
+ 1850 006a 0B       		.uleb128 0xb
+ 1851 006b 49       		.uleb128 0x49
+ 1852 006c 13       		.uleb128 0x13
+ 1853 006d 00       		.byte	0
+ 1854 006e 00       		.byte	0
+ 1855 006f 0A       		.uleb128 0xa
+ 1856 0070 13       		.uleb128 0x13
+ 1857 0071 01       		.byte	0x1
+ 1858 0072 0B       		.uleb128 0xb
+ 1859 0073 0B       		.uleb128 0xb
+ 1860 0074 3A       		.uleb128 0x3a
+ 1861 0075 0B       		.uleb128 0xb
+ 1862 0076 3B       		.uleb128 0x3b
+ 1863 0077 0B       		.uleb128 0xb
+ 1864 0078 01       		.uleb128 0x1
+ 1865 0079 13       		.uleb128 0x13
+ 1866 007a 00       		.byte	0
+ 1867 007b 00       		.byte	0
+ 1868 007c 0B       		.uleb128 0xb
+ 1869 007d 0D       		.uleb128 0xd
+ 1870 007e 00       		.byte	0
+ 1871 007f 03       		.uleb128 0x3
+ 1872 0080 0E       		.uleb128 0xe
+ 1873 0081 3A       		.uleb128 0x3a
+ 1874 0082 0B       		.uleb128 0xb
+ 1875 0083 3B       		.uleb128 0x3b
+ 1876 0084 0B       		.uleb128 0xb
+ 1877 0085 49       		.uleb128 0x49
+ 1878 0086 13       		.uleb128 0x13
+ 1879 0087 38       		.uleb128 0x38
+ 1880 0088 0B       		.uleb128 0xb
+ 1881 0089 00       		.byte	0
+ 1882 008a 00       		.byte	0
+ 1883 008b 0C       		.uleb128 0xc
+ 1884 008c 16       		.uleb128 0x16
+ 1885 008d 00       		.byte	0
+ 1886 008e 03       		.uleb128 0x3
+ 1887 008f 08       		.uleb128 0x8
+ 1888 0090 3A       		.uleb128 0x3a
+ 1889 0091 0B       		.uleb128 0xb
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 38
+
+
+ 1890 0092 3B       		.uleb128 0x3b
+ 1891 0093 0B       		.uleb128 0xb
+ 1892 0094 49       		.uleb128 0x49
+ 1893 0095 13       		.uleb128 0x13
+ 1894 0096 00       		.byte	0
+ 1895 0097 00       		.byte	0
+ 1896 0098 0D       		.uleb128 0xd
+ 1897 0099 2E       		.uleb128 0x2e
+ 1898 009a 01       		.byte	0x1
+ 1899 009b 3F       		.uleb128 0x3f
+ 1900 009c 19       		.uleb128 0x19
+ 1901 009d 03       		.uleb128 0x3
+ 1902 009e 0E       		.uleb128 0xe
+ 1903 009f 3A       		.uleb128 0x3a
+ 1904 00a0 0B       		.uleb128 0xb
+ 1905 00a1 3B       		.uleb128 0x3b
+ 1906 00a2 0B       		.uleb128 0xb
+ 1907 00a3 11       		.uleb128 0x11
+ 1908 00a4 01       		.uleb128 0x1
+ 1909 00a5 12       		.uleb128 0x12
+ 1910 00a6 06       		.uleb128 0x6
+ 1911 00a7 40       		.uleb128 0x40
+ 1912 00a8 18       		.uleb128 0x18
+ 1913 00a9 9642     		.uleb128 0x2116
+ 1914 00ab 19       		.uleb128 0x19
+ 1915 00ac 01       		.uleb128 0x1
+ 1916 00ad 13       		.uleb128 0x13
+ 1917 00ae 00       		.byte	0
+ 1918 00af 00       		.byte	0
+ 1919 00b0 0E       		.uleb128 0xe
+ 1920 00b1 34       		.uleb128 0x34
+ 1921 00b2 00       		.byte	0
+ 1922 00b3 03       		.uleb128 0x3
+ 1923 00b4 0E       		.uleb128 0xe
+ 1924 00b5 3A       		.uleb128 0x3a
+ 1925 00b6 0B       		.uleb128 0xb
+ 1926 00b7 3B       		.uleb128 0x3b
+ 1927 00b8 0B       		.uleb128 0xb
+ 1928 00b9 49       		.uleb128 0x49
+ 1929 00ba 13       		.uleb128 0x13
+ 1930 00bb 02       		.uleb128 0x2
+ 1931 00bc 18       		.uleb128 0x18
+ 1932 00bd 00       		.byte	0
+ 1933 00be 00       		.byte	0
+ 1934 00bf 0F       		.uleb128 0xf
+ 1935 00c0 34       		.uleb128 0x34
+ 1936 00c1 00       		.byte	0
+ 1937 00c2 03       		.uleb128 0x3
+ 1938 00c3 08       		.uleb128 0x8
+ 1939 00c4 3A       		.uleb128 0x3a
+ 1940 00c5 0B       		.uleb128 0xb
+ 1941 00c6 3B       		.uleb128 0x3b
+ 1942 00c7 0B       		.uleb128 0xb
+ 1943 00c8 49       		.uleb128 0x49
+ 1944 00c9 13       		.uleb128 0x13
+ 1945 00ca 02       		.uleb128 0x2
+ 1946 00cb 18       		.uleb128 0x18
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 39
+
+
+ 1947 00cc 00       		.byte	0
+ 1948 00cd 00       		.byte	0
+ 1949 00ce 10       		.uleb128 0x10
+ 1950 00cf 0B       		.uleb128 0xb
+ 1951 00d0 01       		.byte	0x1
+ 1952 00d1 11       		.uleb128 0x11
+ 1953 00d2 01       		.uleb128 0x1
+ 1954 00d3 12       		.uleb128 0x12
+ 1955 00d4 06       		.uleb128 0x6
+ 1956 00d5 01       		.uleb128 0x1
+ 1957 00d6 13       		.uleb128 0x13
+ 1958 00d7 00       		.byte	0
+ 1959 00d8 00       		.byte	0
+ 1960 00d9 11       		.uleb128 0x11
+ 1961 00da 0B       		.uleb128 0xb
+ 1962 00db 01       		.byte	0x1
+ 1963 00dc 11       		.uleb128 0x11
+ 1964 00dd 01       		.uleb128 0x1
+ 1965 00de 12       		.uleb128 0x12
+ 1966 00df 06       		.uleb128 0x6
+ 1967 00e0 00       		.byte	0
+ 1968 00e1 00       		.byte	0
+ 1969 00e2 12       		.uleb128 0x12
+ 1970 00e3 01       		.uleb128 0x1
+ 1971 00e4 01       		.byte	0x1
+ 1972 00e5 49       		.uleb128 0x49
+ 1973 00e6 13       		.uleb128 0x13
+ 1974 00e7 01       		.uleb128 0x1
+ 1975 00e8 13       		.uleb128 0x13
+ 1976 00e9 00       		.byte	0
+ 1977 00ea 00       		.byte	0
+ 1978 00eb 13       		.uleb128 0x13
+ 1979 00ec 21       		.uleb128 0x21
+ 1980 00ed 00       		.byte	0
+ 1981 00ee 49       		.uleb128 0x49
+ 1982 00ef 13       		.uleb128 0x13
+ 1983 00f0 2F       		.uleb128 0x2f
+ 1984 00f1 0B       		.uleb128 0xb
+ 1985 00f2 00       		.byte	0
+ 1986 00f3 00       		.byte	0
+ 1987 00f4 14       		.uleb128 0x14
+ 1988 00f5 2E       		.uleb128 0x2e
+ 1989 00f6 01       		.byte	0x1
+ 1990 00f7 3F       		.uleb128 0x3f
+ 1991 00f8 19       		.uleb128 0x19
+ 1992 00f9 03       		.uleb128 0x3
+ 1993 00fa 0E       		.uleb128 0xe
+ 1994 00fb 3A       		.uleb128 0x3a
+ 1995 00fc 0B       		.uleb128 0xb
+ 1996 00fd 3B       		.uleb128 0x3b
+ 1997 00fe 0B       		.uleb128 0xb
+ 1998 00ff 27       		.uleb128 0x27
+ 1999 0100 19       		.uleb128 0x19
+ 2000 0101 11       		.uleb128 0x11
+ 2001 0102 01       		.uleb128 0x1
+ 2002 0103 12       		.uleb128 0x12
+ 2003 0104 06       		.uleb128 0x6
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 40
+
+
+ 2004 0105 40       		.uleb128 0x40
+ 2005 0106 18       		.uleb128 0x18
+ 2006 0107 9642     		.uleb128 0x2116
+ 2007 0109 19       		.uleb128 0x19
+ 2008 010a 01       		.uleb128 0x1
+ 2009 010b 13       		.uleb128 0x13
+ 2010 010c 00       		.byte	0
+ 2011 010d 00       		.byte	0
+ 2012 010e 15       		.uleb128 0x15
+ 2013 010f 05       		.uleb128 0x5
+ 2014 0110 00       		.byte	0
+ 2015 0111 03       		.uleb128 0x3
+ 2016 0112 0E       		.uleb128 0xe
+ 2017 0113 3A       		.uleb128 0x3a
+ 2018 0114 0B       		.uleb128 0xb
+ 2019 0115 3B       		.uleb128 0x3b
+ 2020 0116 0B       		.uleb128 0xb
+ 2021 0117 49       		.uleb128 0x49
+ 2022 0118 13       		.uleb128 0x13
+ 2023 0119 02       		.uleb128 0x2
+ 2024 011a 18       		.uleb128 0x18
+ 2025 011b 00       		.byte	0
+ 2026 011c 00       		.byte	0
+ 2027 011d 16       		.uleb128 0x16
+ 2028 011e 2E       		.uleb128 0x2e
+ 2029 011f 00       		.byte	0
+ 2030 0120 3F       		.uleb128 0x3f
+ 2031 0121 19       		.uleb128 0x19
+ 2032 0122 03       		.uleb128 0x3
+ 2033 0123 0E       		.uleb128 0xe
+ 2034 0124 3A       		.uleb128 0x3a
+ 2035 0125 0B       		.uleb128 0xb
+ 2036 0126 3B       		.uleb128 0x3b
+ 2037 0127 0B       		.uleb128 0xb
+ 2038 0128 27       		.uleb128 0x27
+ 2039 0129 19       		.uleb128 0x19
+ 2040 012a 49       		.uleb128 0x49
+ 2041 012b 13       		.uleb128 0x13
+ 2042 012c 11       		.uleb128 0x11
+ 2043 012d 01       		.uleb128 0x1
+ 2044 012e 12       		.uleb128 0x12
+ 2045 012f 06       		.uleb128 0x6
+ 2046 0130 40       		.uleb128 0x40
+ 2047 0131 18       		.uleb128 0x18
+ 2048 0132 9742     		.uleb128 0x2117
+ 2049 0134 19       		.uleb128 0x19
+ 2050 0135 00       		.byte	0
+ 2051 0136 00       		.byte	0
+ 2052 0137 17       		.uleb128 0x17
+ 2053 0138 2E       		.uleb128 0x2e
+ 2054 0139 00       		.byte	0
+ 2055 013a 3F       		.uleb128 0x3f
+ 2056 013b 19       		.uleb128 0x19
+ 2057 013c 03       		.uleb128 0x3
+ 2058 013d 0E       		.uleb128 0xe
+ 2059 013e 3A       		.uleb128 0x3a
+ 2060 013f 0B       		.uleb128 0xb
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 41
+
+
+ 2061 0140 3B       		.uleb128 0x3b
+ 2062 0141 0B       		.uleb128 0xb
+ 2063 0142 27       		.uleb128 0x27
+ 2064 0143 19       		.uleb128 0x19
+ 2065 0144 11       		.uleb128 0x11
+ 2066 0145 01       		.uleb128 0x1
+ 2067 0146 12       		.uleb128 0x12
+ 2068 0147 06       		.uleb128 0x6
+ 2069 0148 40       		.uleb128 0x40
+ 2070 0149 18       		.uleb128 0x18
+ 2071 014a 9642     		.uleb128 0x2116
+ 2072 014c 19       		.uleb128 0x19
+ 2073 014d 00       		.byte	0
+ 2074 014e 00       		.byte	0
+ 2075 014f 18       		.uleb128 0x18
+ 2076 0150 34       		.uleb128 0x34
+ 2077 0151 00       		.byte	0
+ 2078 0152 03       		.uleb128 0x3
+ 2079 0153 0E       		.uleb128 0xe
+ 2080 0154 3A       		.uleb128 0x3a
+ 2081 0155 0B       		.uleb128 0xb
+ 2082 0156 3B       		.uleb128 0x3b
+ 2083 0157 0B       		.uleb128 0xb
+ 2084 0158 49       		.uleb128 0x49
+ 2085 0159 13       		.uleb128 0x13
+ 2086 015a 3F       		.uleb128 0x3f
+ 2087 015b 19       		.uleb128 0x19
+ 2088 015c 02       		.uleb128 0x2
+ 2089 015d 18       		.uleb128 0x18
+ 2090 015e 00       		.byte	0
+ 2091 015f 00       		.byte	0
+ 2092 0160 00       		.byte	0
+ 2093              		.section	.debug_aranges,"",%progbits
+ 2094 0000 5C000000 		.4byte	0x5c
+ 2095 0004 0200     		.2byte	0x2
+ 2096 0006 00000000 		.4byte	.Ldebug_info0
+ 2097 000a 04       		.byte	0x4
+ 2098 000b 00       		.byte	0
+ 2099 000c 0000     		.2byte	0
+ 2100 000e 0000     		.2byte	0
+ 2101 0010 00000000 		.4byte	.LFB37
+ 2102 0014 F4000000 		.4byte	.LFE37-.LFB37
+ 2103 0018 00000000 		.4byte	.LFB38
+ 2104 001c 68000000 		.4byte	.LFE38-.LFB38
+ 2105 0020 00000000 		.4byte	.LFB39
+ 2106 0024 1C010000 		.4byte	.LFE39-.LFB39
+ 2107 0028 00000000 		.4byte	.LFB40
+ 2108 002c 68000000 		.4byte	.LFE40-.LFB40
+ 2109 0030 00000000 		.4byte	.LFB41
+ 2110 0034 14000000 		.4byte	.LFE41-.LFB41
+ 2111 0038 00000000 		.4byte	.LFB42
+ 2112 003c 64000000 		.4byte	.LFE42-.LFB42
+ 2113 0040 00000000 		.4byte	.LFB43
+ 2114 0044 70000000 		.4byte	.LFE43-.LFB43
+ 2115 0048 00000000 		.4byte	.LFB44
+ 2116 004c 64010000 		.4byte	.LFE44-.LFB44
+ 2117 0050 00000000 		.4byte	.LFB45
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 42
+
+
+ 2118 0054 30000000 		.4byte	.LFE45-.LFB45
+ 2119 0058 00000000 		.4byte	0
+ 2120 005c 00000000 		.4byte	0
+ 2121              		.section	.debug_ranges,"",%progbits
+ 2122              	.Ldebug_ranges0:
+ 2123 0000 00000000 		.4byte	.LFB37
+ 2124 0004 F4000000 		.4byte	.LFE37
+ 2125 0008 00000000 		.4byte	.LFB38
+ 2126 000c 68000000 		.4byte	.LFE38
+ 2127 0010 00000000 		.4byte	.LFB39
+ 2128 0014 1C010000 		.4byte	.LFE39
+ 2129 0018 00000000 		.4byte	.LFB40
+ 2130 001c 68000000 		.4byte	.LFE40
+ 2131 0020 00000000 		.4byte	.LFB41
+ 2132 0024 14000000 		.4byte	.LFE41
+ 2133 0028 00000000 		.4byte	.LFB42
+ 2134 002c 64000000 		.4byte	.LFE42
+ 2135 0030 00000000 		.4byte	.LFB43
+ 2136 0034 70000000 		.4byte	.LFE43
+ 2137 0038 00000000 		.4byte	.LFB44
+ 2138 003c 64010000 		.4byte	.LFE44
+ 2139 0040 00000000 		.4byte	.LFB45
+ 2140 0044 30000000 		.4byte	.LFE45
+ 2141 0048 00000000 		.4byte	0
+ 2142 004c 00000000 		.4byte	0
+ 2143              		.section	.debug_line,"",%progbits
+ 2144              	.Ldebug_line0:
+ 2145 0000 A9010000 		.section	.debug_str,"MS",%progbits,1
+ 2145      02006700 
+ 2145      00000201 
+ 2145      FB0E0D00 
+ 2145      01010101 
+ 2146              	.LASF89:
+ 2147 0000 6C65645F 		.ascii	"led_name\000"
+ 2147      6E616D65 
+ 2147      00
+ 2148              	.LASF108:
+ 2149 0009 4C45445F 		.ascii	"LED_set_state\000"
+ 2149      7365745F 
+ 2149      73746174 
+ 2149      6500
+ 2150              	.LASF24:
+ 2151 0017 4359424C 		.ascii	"CYBLE_EVT_GAP_PASSKEY_ENTRY_REQUEST\000"
+ 2151      455F4556 
+ 2151      545F4741 
+ 2151      505F5041 
+ 2151      53534B45 
+ 2152              	.LASF11:
+ 2153 003b 666C6F61 		.ascii	"float\000"
+ 2153      7400
+ 2154              	.LASF87:
+ 2155 0041 6C65645F 		.ascii	"led_num\000"
+ 2155      6E756D00 
+ 2156              	.LASF115:
+ 2157 0049 6C65645F 		.ascii	"led_pattern\000"
+ 2157      70617474 
+ 2157      65726E00 
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 43
+
+
+ 2158              	.LASF21:
+ 2159 0055 4359424C 		.ascii	"CYBLE_EVT_MEMORY_REQUEST\000"
+ 2159      455F4556 
+ 2159      545F4D45 
+ 2159      4D4F5259 
+ 2159      5F524551 
+ 2160              	.LASF83:
+ 2161 006e 626F6F6C 		.ascii	"bool\000"
+ 2161      00
+ 2162              	.LASF113:
+ 2163 0073 6C65645F 		.ascii	"led_array\000"
+ 2163      61727261 
+ 2163      7900
+ 2164              	.LASF30:
+ 2165 007d 4359424C 		.ascii	"CYBLE_EVT_GAP_DEVICE_DISCONNECTED\000"
+ 2165      455F4556 
+ 2165      545F4741 
+ 2165      505F4445 
+ 2165      56494345 
+ 2166              	.LASF84:
+ 2167 009f 4C454431 		.ascii	"LED1\000"
+ 2167      00
+ 2168              	.LASF93:
+ 2169 00a4 6C65645F 		.ascii	"led_reg1\000"
+ 2169      72656731 
+ 2169      00
+ 2170              	.LASF36:
+ 2171 00ad 4359424C 		.ascii	"CYBLE_EVT_GAP_KEYPRESS_NOTIFICATION\000"
+ 2171      455F4556 
+ 2171      545F4741 
+ 2171      505F4B45 
+ 2171      59505245 
+ 2172              	.LASF2:
+ 2173 00d1 73686F72 		.ascii	"short int\000"
+ 2173      7420696E 
+ 2173      7400
+ 2174              	.LASF27:
+ 2175 00db 4359424C 		.ascii	"CYBLE_EVT_GAP_AUTH_FAILED\000"
+ 2175      455F4556 
+ 2175      545F4741 
+ 2175      505F4155 
+ 2175      54485F46 
+ 2176              	.LASF44:
+ 2177 00f5 4359424C 		.ascii	"CYBLE_EVT_GATT_DISCONNECT_IND\000"
+ 2177      455F4556 
+ 2177      545F4741 
+ 2177      54545F44 
+ 2177      4953434F 
+ 2178              	.LASF14:
+ 2179 0113 73697A65 		.ascii	"sizetype\000"
+ 2179      74797065 
+ 2179      00
+ 2180              	.LASF38:
+ 2181 011c 4359424C 		.ascii	"CYBLE_EVT_GAP_DATA_LENGTH_CHANGE\000"
+ 2181      455F4556 
+ 2181      545F4741 
+ 2181      505F4441 
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 44
+
+
+ 2181      54415F4C 
+ 2182              	.LASF19:
+ 2183 013d 4359424C 		.ascii	"CYBLE_EVT_HCI_STATUS\000"
+ 2183      455F4556 
+ 2183      545F4843 
+ 2183      495F5354 
+ 2183      41545553 
+ 2184              	.LASF6:
+ 2185 0152 6C6F6E67 		.ascii	"long long int\000"
+ 2185      206C6F6E 
+ 2185      6720696E 
+ 2185      7400
+ 2186              	.LASF102:
+ 2187 0160 63757272 		.ascii	"currentBuf\000"
+ 2187      656E7442 
+ 2187      756600
+ 2188              	.LASF55:
+ 2189 016b 4359424C 		.ascii	"CYBLE_EVT_GATTC_WRITE_RSP\000"
+ 2189      455F4556 
+ 2189      545F4741 
+ 2189      5454435F 
+ 2189      57524954 
+ 2190              	.LASF48:
+ 2191 0185 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_BY_TYPE_RSP\000"
+ 2191      455F4556 
+ 2191      545F4741 
+ 2191      5454435F 
+ 2191      52454144 
+ 2192              	.LASF16:
+ 2193 01a6 4359424C 		.ascii	"CYBLE_EVT_STACK_ON\000"
+ 2193      455F4556 
+ 2193      545F5354 
+ 2193      41434B5F 
+ 2193      4F4E00
+ 2194              	.LASF104:
+ 2195 01b9 4C45445F 		.ascii	"LED_RGB_set_brightness\000"
+ 2195      5247425F 
+ 2195      7365745F 
+ 2195      62726967 
+ 2195      68746E65 
+ 2196              	.LASF45:
+ 2197 01d0 4359424C 		.ascii	"CYBLE_EVT_GATTS_XCNHG_MTU_REQ\000"
+ 2197      455F4556 
+ 2197      545F4741 
+ 2197      5454535F 
+ 2197      58434E48 
+ 2198              	.LASF10:
+ 2199 01ee 75696E74 		.ascii	"uint16\000"
+ 2199      313600
+ 2200              	.LASF103:
+ 2201 01f5 4C45445F 		.ascii	"LED_set_brightness\000"
+ 2201      7365745F 
+ 2201      62726967 
+ 2201      68746E65 
+ 2201      737300
+ 2202              	.LASF34:
+ 2203 0208 4359424C 		.ascii	"CYBLE_EVT_GAP_KEYINFO_EXCHNGE_CMPLT\000"
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 45
+
+
+ 2203      455F4556 
+ 2203      545F4741 
+ 2203      505F4B45 
+ 2203      59494E46 
+ 2204              	.LASF53:
+ 2205 022c 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_MULTI_RSP\000"
+ 2205      455F4556 
+ 2205      545F4741 
+ 2205      5454435F 
+ 2205      52454144 
+ 2206              	.LASF62:
+ 2207 024b 4359424C 		.ascii	"CYBLE_EVT_GATTS_HANDLE_VALUE_CNF\000"
+ 2207      455F4556 
+ 2207      545F4741 
+ 2207      5454535F 
+ 2207      48414E44 
+ 2208              	.LASF15:
+ 2209 026c 4359424C 		.ascii	"CYBLE_EVT_HOST_INVALID\000"
+ 2209      455F4556 
+ 2209      545F484F 
+ 2209      53545F49 
+ 2209      4E56414C 
+ 2210              	.LASF99:
+ 2211 0283 73627566 		.ascii	"sbuf\000"
+ 2211      00
+ 2212              	.LASF92:
+ 2213 0288 6C65645F 		.ascii	"led_reg\000"
+ 2213      72656700 
+ 2214              	.LASF112:
+ 2215 0290 4C45445F 		.ascii	"LED_all_off\000"
+ 2215      616C6C5F 
+ 2215      6F666600 
+ 2216              	.LASF88:
+ 2217 029c 6C65645F 		.ascii	"led_num_pair\000"
+ 2217      6E756D5F 
+ 2217      70616972 
+ 2217      00
+ 2218              	.LASF91:
+ 2219 02a9 706F7274 		.ascii	"port_num\000"
+ 2219      5F6E756D 
+ 2219      00
+ 2220              	.LASF100:
+ 2221 02b2 77627566 		.ascii	"wbuf\000"
+ 2221      00
+ 2222              	.LASF51:
+ 2223 02b7 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_RSP\000"
+ 2223      455F4556 
+ 2223      545F4741 
+ 2223      5454435F 
+ 2223      52454144 
+ 2224              	.LASF35:
+ 2225 02d0 4359424C 		.ascii	"CYBLE_EVT_GAP_NUMERIC_COMPARISON_REQUEST\000"
+ 2225      455F4556 
+ 2225      545F4741 
+ 2225      505F4E55 
+ 2225      4D455249 
+ 2226              	.LASF40:
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 46
+
+
+ 2227 02f9 4359424C 		.ascii	"CYBLE_EVT_GAPC_DIRECT_ADV_REPORT\000"
+ 2227      455F4556 
+ 2227      545F4741 
+ 2227      50435F44 
+ 2227      49524543 
+ 2228              	.LASF7:
+ 2229 031a 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2229      206C6F6E 
+ 2229      6720756E 
+ 2229      7369676E 
+ 2229      65642069 
+ 2230              	.LASF4:
+ 2231 0331 6C6F6E67 		.ascii	"long int\000"
+ 2231      20696E74 
+ 2231      00
+ 2232              	.LASF61:
+ 2233 033a 4359424C 		.ascii	"CYBLE_EVT_GATTC_HANDLE_VALUE_IND\000"
+ 2233      455F4556 
+ 2233      545F4741 
+ 2233      5454435F 
+ 2233      48414E44 
+ 2234              	.LASF82:
+ 2235 035b 74727565 		.ascii	"true\000"
+ 2235      00
+ 2236              	.LASF29:
+ 2237 0360 4359424C 		.ascii	"CYBLE_EVT_GAP_DEVICE_CONNECTED\000"
+ 2237      455F4556 
+ 2237      545F4741 
+ 2237      505F4445 
+ 2237      56494345 
+ 2238              	.LASF95:
+ 2239 037f 63757272 		.ascii	"current_digit\000"
+ 2239      656E745F 
+ 2239      64696769 
+ 2239      7400
+ 2240              	.LASF111:
+ 2241 038d 4C45445F 		.ascii	"LED_toggle_and_dark\000"
+ 2241      746F6767 
+ 2241      6C655F61 
+ 2241      6E645F64 
+ 2241      61726B00 
+ 2242              	.LASF60:
+ 2243 03a1 4359424C 		.ascii	"CYBLE_EVT_GATTC_HANDLE_VALUE_NTF\000"
+ 2243      455F4556 
+ 2243      545F4741 
+ 2243      5454435F 
+ 2243      48414E44 
+ 2244              	.LASF20:
+ 2245 03c2 4359424C 		.ascii	"CYBLE_EVT_STACK_BUSY_STATUS\000"
+ 2245      455F4556 
+ 2245      545F5354 
+ 2245      41434B5F 
+ 2245      42555359 
+ 2246              	.LASF31:
+ 2247 03de 4359424C 		.ascii	"CYBLE_EVT_GAP_ENCRYPT_CHANGE\000"
+ 2247      455F4556 
+ 2247      545F4741 
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 47
+
+
+ 2247      505F454E 
+ 2247      43525950 
+ 2248              	.LASF25:
+ 2249 03fb 4359424C 		.ascii	"CYBLE_EVT_GAP_PASSKEY_DISPLAY_REQUEST\000"
+ 2249      455F4556 
+ 2249      545F4741 
+ 2249      505F5041 
+ 2249      53534B45 
+ 2250              	.LASF77:
+ 2251 0421 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DATA_WRITE_IND\000"
+ 2251      455F4556 
+ 2251      545F4C32 
+ 2251      4341505F 
+ 2251      43424643 
+ 2252              	.LASF71:
+ 2253 0445 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_CONN_CNF\000"
+ 2253      455F4556 
+ 2253      545F4C32 
+ 2253      4341505F 
+ 2253      43424643 
+ 2254              	.LASF39:
+ 2255 0463 4359424C 		.ascii	"CYBLE_EVT_GAP_ENHANCE_CONN_COMPLETE\000"
+ 2255      455F4556 
+ 2255      545F4741 
+ 2255      505F454E 
+ 2255      48414E43 
+ 2256              	.LASF101:
+ 2257 0487 6F6E4275 		.ascii	"onBuf\000"
+ 2257      6600
+ 2258              	.LASF52:
+ 2259 048d 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_BLOB_RSP\000"
+ 2259      455F4556 
+ 2259      545F4741 
+ 2259      5454435F 
+ 2259      52454144 
+ 2260              	.LASF67:
+ 2261 04ab 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CONN_PARAM_UPDATE_REQ\000"
+ 2261      455F4556 
+ 2261      545F4C32 
+ 2261      4341505F 
+ 2261      434F4E4E 
+ 2262              	.LASF1:
+ 2263 04d1 756E7369 		.ascii	"unsigned char\000"
+ 2263      676E6564 
+ 2263      20636861 
+ 2263      7200
+ 2264              	.LASF57:
+ 2265 04df 4359424C 		.ascii	"CYBLE_EVT_GATTS_PREP_WRITE_REQ\000"
+ 2265      455F4556 
+ 2265      545F4741 
+ 2265      5454535F 
+ 2265      50524550 
+ 2266              	.LASF79:
+ 2267 04fe 4359424C 		.ascii	"CYBLE_EVT_LE_PING_AUTH_TIMEOUT\000"
+ 2267      455F4556 
+ 2267      545F4C45 
+ 2267      5F50494E 
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 48
+
+
+ 2267      475F4155 
+ 2268              	.LASF49:
+ 2269 051d 4359424C 		.ascii	"CYBLE_EVT_GATTC_FIND_INFO_RSP\000"
+ 2269      455F4556 
+ 2269      545F4741 
+ 2269      5454435F 
+ 2269      46494E44 
+ 2270              	.LASF0:
+ 2271 053b 7369676E 		.ascii	"signed char\000"
+ 2271      65642063 
+ 2271      68617200 
+ 2272              	.LASF54:
+ 2273 0547 4359424C 		.ascii	"CYBLE_EVT_GATTS_WRITE_REQ\000"
+ 2273      455F4556 
+ 2273      545F4741 
+ 2273      5454535F 
+ 2273      57524954 
+ 2274              	.LASF50:
+ 2275 0561 4359424C 		.ascii	"CYBLE_EVT_GATTC_FIND_BY_TYPE_VALUE_RSP\000"
+ 2275      455F4556 
+ 2275      545F4741 
+ 2275      5454435F 
+ 2275      46494E44 
+ 2276              	.LASF9:
+ 2277 0588 75696E74 		.ascii	"uint8\000"
+ 2277      3800
+ 2278              	.LASF26:
+ 2279 058e 4359424C 		.ascii	"CYBLE_EVT_GAP_AUTH_COMPLETE\000"
+ 2279      455F4556 
+ 2279      545F4741 
+ 2279      505F4155 
+ 2279      54485F43 
+ 2280              	.LASF8:
+ 2281 05aa 756E7369 		.ascii	"unsigned int\000"
+ 2281      676E6564 
+ 2281      20696E74 
+ 2281      00
+ 2282              	.LASF81:
+ 2283 05b7 66616C73 		.ascii	"false\000"
+ 2283      6500
+ 2284              	.LASF43:
+ 2285 05bd 4359424C 		.ascii	"CYBLE_EVT_GATT_CONNECT_IND\000"
+ 2285      455F4556 
+ 2285      545F4741 
+ 2285      54545F43 
+ 2285      4F4E4E45 
+ 2286              	.LASF5:
+ 2287 05d8 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2287      20756E73 
+ 2287      69676E65 
+ 2287      6420696E 
+ 2287      7400
+ 2288              	.LASF23:
+ 2289 05ea 4359424C 		.ascii	"CYBLE_EVT_GAP_AUTH_REQ\000"
+ 2289      455F4556 
+ 2289      545F4741 
+ 2289      505F4155 
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 49
+
+
+ 2289      54485F52 
+ 2290              	.LASF72:
+ 2291 0601 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DISCONN_IND\000"
+ 2291      455F4556 
+ 2291      545F4C32 
+ 2291      4341505F 
+ 2291      43424643 
+ 2292              	.LASF86:
+ 2293 0622 4C415354 		.ascii	"LAST_LED\000"
+ 2293      5F4C4544 
+ 2293      00
+ 2294              	.LASF96:
+ 2295 062b 62726967 		.ascii	"brightness\000"
+ 2295      68746E65 
+ 2295      737300
+ 2296              	.LASF66:
+ 2297 0636 4359424C 		.ascii	"CYBLE_EVT_GATTC_LONG_PROCEDURE_END\000"
+ 2297      455F4556 
+ 2297      545F4741 
+ 2297      5454435F 
+ 2297      4C4F4E47 
+ 2298              	.LASF3:
+ 2299 0659 73686F72 		.ascii	"short unsigned int\000"
+ 2299      7420756E 
+ 2299      7369676E 
+ 2299      65642069 
+ 2299      6E7400
+ 2300              	.LASF32:
+ 2301 066c 4359424C 		.ascii	"CYBLE_EVT_GAP_CONNECTION_UPDATE_COMPLETE\000"
+ 2301      455F4556 
+ 2301      545F4741 
+ 2301      505F434F 
+ 2301      4E4E4543 
+ 2302              	.LASF41:
+ 2303 0695 4359424C 		.ascii	"CYBLE_EVT_GAP_SMP_NEGOTIATED_AUTH_INFO\000"
+ 2303      455F4556 
+ 2303      545F4741 
+ 2303      505F534D 
+ 2303      505F4E45 
+ 2304              	.LASF13:
+ 2305 06bc 63686172 		.ascii	"char\000"
+ 2305      00
+ 2306              	.LASF116:
+ 2307 06c1 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 2307      4320342E 
+ 2307      392E3320 
+ 2307      32303135 
+ 2307      30333033 
+ 2308 06f4 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0 -mthumb -g -O"
+ 2308      20726576 
+ 2308      6973696F 
+ 2308      6E203232 
+ 2308      31323230 
+ 2309 0727 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 2309      66756E63 
+ 2309      74696F6E 
+ 2309      2D736563 
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 50
+
+
+ 2309      74696F6E 
+ 2310              	.LASF69:
+ 2311 074f 4359424C 		.ascii	"CYBLE_EVT_L2CAP_COMMAND_REJ\000"
+ 2311      455F4556 
+ 2311      545F4C32 
+ 2311      4341505F 
+ 2311      434F4D4D 
+ 2312              	.LASF114:
+ 2313 076b 5247425F 		.ascii	"RGB_led_array\000"
+ 2313      6C65645F 
+ 2313      61727261 
+ 2313      7900
+ 2314              	.LASF117:
+ 2315 0779 2E5C4C45 		.ascii	".\\LED.c\000"
+ 2315      442E6300 
+ 2316              	.LASF98:
+ 2317 0781 6F6E5F74 		.ascii	"on_time\000"
+ 2317      696D6500 
+ 2318              	.LASF73:
+ 2319 0789 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DISCONN_CNF\000"
+ 2319      455F4556 
+ 2319      545F4C32 
+ 2319      4341505F 
+ 2319      43424643 
+ 2320              	.LASF109:
+ 2321 07aa 4C45445F 		.ascii	"LED_get_current_pattern\000"
+ 2321      6765745F 
+ 2321      63757272 
+ 2321      656E745F 
+ 2321      70617474 
+ 2322              	.LASF85:
+ 2323 07c2 4C454432 		.ascii	"LED2\000"
+ 2323      00
+ 2324              	.LASF59:
+ 2325 07c7 4359424C 		.ascii	"CYBLE_EVT_GATTC_EXEC_WRITE_RSP\000"
+ 2325      455F4556 
+ 2325      545F4741 
+ 2325      5454435F 
+ 2325      45584543 
+ 2326              	.LASF33:
+ 2327 07e6 4359424C 		.ascii	"CYBLE_EVT_GAPC_SCAN_START_STOP\000"
+ 2327      455F4556 
+ 2327      545F4741 
+ 2327      50435F53 
+ 2327      43414E5F 
+ 2328              	.LASF78:
+ 2329 0805 4359424C 		.ascii	"CYBLE_EVT_PENDING_FLASH_WRITE\000"
+ 2329      455F4556 
+ 2329      545F5045 
+ 2329      4E44494E 
+ 2329      475F464C 
+ 2330              	.LASF75:
+ 2331 0823 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_RX_CREDIT_IND\000"
+ 2331      455F4556 
+ 2331      545F4C32 
+ 2331      4341505F 
+ 2331      43424643 
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 51
+
+
+ 2332              	.LASF12:
+ 2333 0846 646F7562 		.ascii	"double\000"
+ 2333      6C6500
+ 2334              	.LASF76:
+ 2335 084d 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_TX_CREDIT_IND\000"
+ 2335      455F4556 
+ 2335      545F4C32 
+ 2335      4341505F 
+ 2335      43424643 
+ 2336              	.LASF70:
+ 2337 0870 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_CONN_IND\000"
+ 2337      455F4556 
+ 2337      545F4C32 
+ 2337      4341505F 
+ 2337      43424643 
+ 2338              	.LASF28:
+ 2339 088e 4359424C 		.ascii	"CYBLE_EVT_GAPP_ADVERTISEMENT_START_STOP\000"
+ 2339      455F4556 
+ 2339      545F4741 
+ 2339      50505F41 
+ 2339      44564552 
+ 2340              	.LASF18:
+ 2341 08b6 4359424C 		.ascii	"CYBLE_EVT_HARDWARE_ERROR\000"
+ 2341      455F4556 
+ 2341      545F4841 
+ 2341      52445741 
+ 2341      52455F45 
+ 2342              	.LASF74:
+ 2343 08cf 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CBFC_DATA_READ\000"
+ 2343      455F4556 
+ 2343      545F4C32 
+ 2343      4341505F 
+ 2343      43424643 
+ 2344              	.LASF68:
+ 2345 08ee 4359424C 		.ascii	"CYBLE_EVT_L2CAP_CONN_PARAM_UPDATE_RSP\000"
+ 2345      455F4556 
+ 2345      545F4C32 
+ 2345      4341505F 
+ 2345      434F4E4E 
+ 2346              	.LASF22:
+ 2347 0914 4359424C 		.ascii	"CYBLE_EVT_GAPC_SCAN_PROGRESS_RESULT\000"
+ 2347      455F4556 
+ 2347      545F4741 
+ 2347      50435F53 
+ 2347      43414E5F 
+ 2348              	.LASF97:
+ 2349 0938 6C65645F 		.ascii	"led_state\000"
+ 2349      73746174 
+ 2349      6500
+ 2350              	.LASF119:
+ 2351 0942 4C45445F 		.ascii	"LED_initialize\000"
+ 2351      696E6974 
+ 2351      69616C69 
+ 2351      7A6500
+ 2352              	.LASF110:
+ 2353 0951 4C45445F 		.ascii	"LED_init_params\000"
+ 2353      696E6974 
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 52
+
+
+ 2353      5F706172 
+ 2353      616D7300 
+ 2354              	.LASF47:
+ 2355 0961 4359424C 		.ascii	"CYBLE_EVT_GATTC_READ_BY_GROUP_TYPE_RSP\000"
+ 2355      455F4556 
+ 2355      545F4741 
+ 2355      5454435F 
+ 2355      52454144 
+ 2356              	.LASF56:
+ 2357 0988 4359424C 		.ascii	"CYBLE_EVT_GATTS_WRITE_CMD_REQ\000"
+ 2357      455F4556 
+ 2357      545F4741 
+ 2357      5454535F 
+ 2357      57524954 
+ 2358              	.LASF94:
+ 2359 09a6 63757272 		.ascii	"current_reg\000"
+ 2359      656E745F 
+ 2359      72656700 
+ 2360              	.LASF46:
+ 2361 09b2 4359424C 		.ascii	"CYBLE_EVT_GATTC_XCHNG_MTU_RSP\000"
+ 2361      455F4556 
+ 2361      545F4741 
+ 2361      5454435F 
+ 2361      5843484E 
+ 2362              	.LASF90:
+ 2363 09d0 70617274 		.ascii	"part_number\000"
+ 2363      5F6E756D 
+ 2363      62657200 
+ 2364              	.LASF106:
+ 2365 09dc 6C65645F 		.ascii	"led_current_digit\000"
+ 2365      63757272 
+ 2365      656E745F 
+ 2365      64696769 
+ 2365      7400
+ 2366              	.LASF17:
+ 2367 09ee 4359424C 		.ascii	"CYBLE_EVT_TIMEOUT\000"
+ 2367      455F4556 
+ 2367      545F5449 
+ 2367      4D454F55 
+ 2367      5400
+ 2368              	.LASF118:
+ 2369 0a00 433A5C55 		.ascii	"C:\\Users\\humon\\Desktop\\CypressMinimal\\MinimalF"
+ 2369      73657273 
+ 2369      5C68756D 
+ 2369      6F6E5C44 
+ 2369      65736B74 
+ 2370 0a2e 69726D77 		.ascii	"irmwareWorkspace\\MinimalFirmware.cydsn\000"
+ 2370      61726557 
+ 2370      6F726B73 
+ 2370      70616365 
+ 2370      5C4D696E 
+ 2371              	.LASF80:
+ 2372 0a55 4359424C 		.ascii	"CYBLE_EVT_MAX\000"
+ 2372      455F4556 
+ 2372      545F4D41 
+ 2372      5800
+ 2373              	.LASF65:
+ARM GAS  C:\Users\humon\AppData\Local\Temp\ccBBtYUV.s 			page 53
+
+
+ 2374 0a63 4359424C 		.ascii	"CYBLE_EVT_GATTS_READ_CHAR_VAL_ACCESS_REQ\000"
+ 2374      455F4556 
+ 2374      545F4741 
+ 2374      5454535F 
+ 2374      52454144 
+ 2375              	.LASF64:
+ 2376 0a8c 4359424C 		.ascii	"CYBLE_EVT_GATTC_STOP_CMD_COMPLETE\000"
+ 2376      455F4556 
+ 2376      545F4741 
+ 2376      5454435F 
+ 2376      53544F50 
+ 2377              	.LASF107:
+ 2378 0aae 4C45445F 		.ascii	"LED_RGB_set_state\000"
+ 2378      5247425F 
+ 2378      7365745F 
+ 2378      73746174 
+ 2378      6500
+ 2379              	.LASF58:
+ 2380 0ac0 4359424C 		.ascii	"CYBLE_EVT_GATTS_EXEC_WRITE_REQ\000"
+ 2380      455F4556 
+ 2380      545F4741 
+ 2380      5454535F 
+ 2380      45584543 
+ 2381              	.LASF42:
+ 2382 0adf 4359424C 		.ascii	"CYBLE_EVT_GATTC_ERROR_RSP\000"
+ 2382      455F4556 
+ 2382      545F4741 
+ 2382      5454435F 
+ 2382      4552524F 
+ 2383              	.LASF63:
+ 2384 0af9 4359424C 		.ascii	"CYBLE_EVT_GATTS_DATA_SIGNED_CMD_REQ\000"
+ 2384      455F4556 
+ 2384      545F4741 
+ 2384      5454535F 
+ 2384      44415441 
+ 2385              	.LASF105:
+ 2386 0b1d 62726967 		.ascii	"brightness_hex\000"
+ 2386      68746E65 
+ 2386      73735F68 
+ 2386      657800
+ 2387              	.LASF37:
+ 2388 0b2c 4359424C 		.ascii	"CYBLE_EVT_GAP_OOB_GENERATED_NOTIFICATION\000"
+ 2388      455F4556 
+ 2388      545F4741 
+ 2388      505F4F4F 
+ 2388      425F4745 
+ 2389              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br
