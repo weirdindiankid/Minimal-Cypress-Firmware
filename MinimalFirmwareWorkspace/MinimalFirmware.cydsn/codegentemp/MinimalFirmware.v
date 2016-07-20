@@ -1,6 +1,6 @@
 // ======================================================================
 // MinimalFirmware.v generated from TopDesign.cysch
-// 07/18/2016 at 14:30
+// 07/20/2016 at 17:35
 // This file is auto generated. ANY EDITS YOU MAKE MAY BE LOST WHEN THIS FILE IS REGENERATED!!!
 // ======================================================================
 
@@ -513,7 +513,7 @@ module top ;
           wire  Net_340;
           wire  Net_301;
           wire  Net_300;
-          wire  Net_299;
+          wire  Net_359;
 
 	wire [0:0] tmpOE__POWER_HOLD_net;
 	wire [0:0] tmpFB_0__POWER_HOLD_net;
@@ -651,7 +651,7 @@ module top ;
 		CHARGE_STATUS
 		 (.oe(tmpOE__CHARGE_STATUS_net),
 		  .y({1'b0}),
-		  .fb({Net_299}),
+		  .fb({Net_359}),
 		  .io({tmpIO_0__CHARGE_STATUS_net[0:0]}),
 		  .siovref(tmpSIOVREF__CHARGE_STATUS_net),
 		  .interrupt({tmpINTERRUPT_0__CHARGE_STATUS_net[0:0]}),

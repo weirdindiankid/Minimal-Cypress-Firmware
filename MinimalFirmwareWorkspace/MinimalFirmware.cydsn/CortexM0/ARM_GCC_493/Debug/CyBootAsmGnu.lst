@@ -10049,7 +10049,7 @@ ARM GAS  .\Generated_Source\PSoC4\CyBootAsmGnu.s 			page 1
    8              	.set BLE_bless_isr__INTC_MASK, 0x1000
    9              	.set BLE_bless_isr__INTC_NUMBER, 12
   10              	.set BLE_bless_isr__INTC_PRIOR_MASK, 0xC0
-  11              	.set BLE_bless_isr__INTC_PRIOR_NUM, 3
+  11              	.set BLE_bless_isr__INTC_PRIOR_NUM, 1
   12              	.set BLE_bless_isr__INTC_PRIOR_REG, CYREG_CM0_IPR3
   13              	.set BLE_bless_isr__INTC_SET_EN_REG, CYREG_CM0_ISER
   14              	.set BLE_bless_isr__INTC_SET_PD_REG, CYREG_CM0_ISPR
@@ -10391,7 +10391,7 @@ ARM GAS  .\Generated_Source\PSoC4\CyBootAsmGnu.s 			page 1
  332              	.set I2CM_SCB_IRQ__INTC_MASK, 0x400
  333              	.set I2CM_SCB_IRQ__INTC_NUMBER, 10
  334              	.set I2CM_SCB_IRQ__INTC_PRIOR_MASK, 0xC00000
- 335              	.set I2CM_SCB_IRQ__INTC_PRIOR_NUM, 3
+ 335              	.set I2CM_SCB_IRQ__INTC_PRIOR_NUM, 2
  336              	.set I2CM_SCB_IRQ__INTC_PRIOR_REG, CYREG_CM0_IPR2
  337              	.set I2CM_SCB_IRQ__INTC_SET_EN_REG, CYREG_CM0_ISER
  338              	.set I2CM_SCB_IRQ__INTC_SET_PD_REG, CYREG_CM0_ISPR

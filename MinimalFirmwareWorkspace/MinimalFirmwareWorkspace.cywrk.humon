@@ -13,7 +13,7 @@
 <v>Output</v>
 </TreeKeys>
 <TreeStates>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="MinimalFirmwareWorkspace\MinimalFirmware\Generated_Source\PSoC4\BLE\BLE_eventHandler.h">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="MinimalFirmwareWorkspace\MinimalFirmware\Source Files\LED.c">
 <ExpandedNodeIds>
 <v>MinimalFirmwareWorkspace</v>
 <v>MinimalFirmwareWorkspace\MinimalFirmware</v>
@@ -149,6 +149,15 @@
 <v>MinimalFirmwareWorkspace\MinimalFirmware\Generated_Source\PSoC4\project.h</v>
 </ExpandedNodeIds>
 <VisibleNodeIds>
+<v>MinimalFirmwareWorkspace</v>
+<v>MinimalFirmwareWorkspace\MinimalFirmware</v>
+<v>MinimalFirmwareWorkspace\MinimalFirmware\TopDesign</v>
+<v>MinimalFirmwareWorkspace\MinimalFirmware\MinimalFirmware.cydwr</v>
+<v>MinimalFirmwareWorkspace\MinimalFirmware\Header Files</v>
+<v>MinimalFirmwareWorkspace\MinimalFirmware\Header Files\cyapicallbacks.h</v>
+<v>MinimalFirmwareWorkspace\MinimalFirmware\Header Files\I2C.h</v>
+<v>MinimalFirmwareWorkspace\MinimalFirmware\Header Files\LED.h</v>
+<v>MinimalFirmwareWorkspace\MinimalFirmware\Header Files\main.h</v>
 <v>MinimalFirmwareWorkspace\MinimalFirmware\Source Files</v>
 <v>MinimalFirmwareWorkspace\MinimalFirmware\Source Files\I2C.c</v>
 <v>MinimalFirmwareWorkspace\MinimalFirmware\Source Files\LED.c</v>
@@ -188,15 +197,6 @@
 <v>MinimalFirmwareWorkspace\MinimalFirmware\Generated_Source\PSoC4\cy_boot\cm0gcc.ld</v>
 <v>MinimalFirmwareWorkspace\MinimalFirmware\Generated_Source\PSoC4\cy_boot\Cm0Iar.icf</v>
 <v>MinimalFirmwareWorkspace\MinimalFirmware\Generated_Source\PSoC4\cy_boot\Cm0RealView.scat</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\Generated_Source\PSoC4\cy_boot\Cm0Start.c</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\Generated_Source\PSoC4\cy_boot\cmsis_armcc.h</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\Generated_Source\PSoC4\cy_boot\cmsis_gcc.h</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\Generated_Source\PSoC4\cy_boot\core_cm0.h</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\Generated_Source\PSoC4\cy_boot\core_cm0_psoc4.h</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\Generated_Source\PSoC4\cy_boot\core_cmFunc.h</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\Generated_Source\PSoC4\cy_boot\core_cmInstr.h</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\Generated_Source\PSoC4\cy_boot\CyBootAsmGnu.s</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\Generated_Source\PSoC4\cy_boot\CyBootAsmIar.s</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 <CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
@@ -265,52 +265,6 @@
 <VisibleNodeIds>
 <v>MinimalFirmwareWorkspace</v>
 <v>MinimalFirmwareWorkspace\MinimalFirmware</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\BLE.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\BLE_bless_isr.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\BLE_custom.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\BLE_eventHandler.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\BLE_gatt.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\BLE_HAL_INT.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\BLE_HAL_PVT.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\CHARGE_STATUS.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\CHARGE_STATUS_PM.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\Cm0Start.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\CyBootAsmGnu.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\cyfitter_cfg.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\CyFlash.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\CyLFClk.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\CyLib.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\cymetadata.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\cyPm.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\cyutils.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\I2C.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\I2CM.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\I2CM_BOOT.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\I2CM_I2C.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\I2CM_I2C_BOOT.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\I2CM_I2C_INT.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\I2CM_I2C_MASTER.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\I2CM_PM.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\I2CM_SCB_IRQ.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\I2CM_SCBCLK.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\I2CM_scl.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\I2CM_scl_PM.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\I2CM_sda.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\I2CM_sda_PM.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\LED.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\main.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\POWER_BUTTON_IN.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\POWER_BUTTON_IN_PM.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\POWER_HOLD.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\POWER_HOLD_PM.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\START_BUTTON_IN.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\Listing Files\START_BUTTON_IN_PM.lst</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\MinimalFirmware.elf</v>
-<v>MinimalFirmwareWorkspace\MinimalFirmware\CortexM0\ARM_GCC_493\Debug\MinimalFirmware.hex</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 </TreeStates>

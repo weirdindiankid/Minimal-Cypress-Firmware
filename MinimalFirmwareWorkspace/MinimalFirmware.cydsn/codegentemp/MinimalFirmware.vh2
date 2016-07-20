@@ -2,7 +2,7 @@
 --	Conversion of MinimalFirmware.v to vh2:
 --
 --	Cypress Semiconductor - WARP Version 6.3 IR 41
---	Mon Jul 18 14:30:04 2016
+--	Wed Jul 20 17:35:08 2016
 --
 
 USE cypress.cypress.all;
@@ -20,7 +20,7 @@ TERMINAL tmpSIOVREF__POWER_HOLD_net_0 : bit;
 SIGNAL one : bit;
 SIGNAL tmpINTERRUPT_0__POWER_HOLD_net_0 : bit;
 SIGNAL tmpOE__CHARGE_STATUS_net_0 : bit;
-SIGNAL Net_299 : bit;
+SIGNAL Net_359 : bit;
 SIGNAL tmpIO_0__CHARGE_STATUS_net_0 : bit;
 TERMINAL tmpSIOVREF__CHARGE_STATUS_net_0 : bit;
 SIGNAL tmpINTERRUPT_0__CHARGE_STATUS_net_0 : bit;
@@ -217,7 +217,7 @@ CHARGE_STATUS:cy_psoc3_pins_v1_10
 		input_buffer_sel=>"00")
 	PORT MAP(oe=>(tmpOE__POWER_HOLD_net_0),
 		y=>(zero),
-		fb=>Net_299,
+		fb=>Net_359,
 		analog=>(open),
 		io=>(tmpIO_0__CHARGE_STATUS_net_0),
 		siovref=>(tmpSIOVREF__CHARGE_STATUS_net_0),

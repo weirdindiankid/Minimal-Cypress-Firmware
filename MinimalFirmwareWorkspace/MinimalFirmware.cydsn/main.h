@@ -10,6 +10,7 @@
  * ========================================
 */
 #include <project.h>
+#include <stdlib.h>
 #include "I2C.h"
 #include "LED.h"
 // Send this to the GAP central

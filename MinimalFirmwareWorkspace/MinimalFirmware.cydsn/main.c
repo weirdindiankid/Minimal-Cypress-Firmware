@@ -64,6 +64,23 @@ void BLE_stack_handler( uint32 event_code, void *event_param ) {
     }
 }
 
+unsigned int rand_interval(unsigned int min, unsigned int max)
+{
+    int r;
+    const unsigned int range = 1 + max - min;
+    const unsigned int buckets = RAND_MAX / range;
+    const unsigned int limit = buckets * range;
+
+    /* Create equal size buckets all in a row, then fire randomly towards
+     * the buckets until you land in one of them. All buckets are equally
+     * likely. If you land off the end of the line of buckets, try again. */
+    do
+    {
+        r = rand();
+    } while (r >= limit);
+
+    return min + (r / buckets);
+}
 
 int main()
 {
@@ -103,7 +120,7 @@ int main()
     LED_RGB_set_state(BLUE_LED, OFF);
     
     // Turn RED LED on to show that device is on
-    LED_RGB_set_state(GREEN_LED, ON);
+    LED_RGB_set_state(BLUE_LED, ON);
     
     
     // The handle value pair wraps values in a Cypress readable format
@@ -146,20 +163,21 @@ int main()
         } else {
             led_p = 0;
         }
+        
         // Put everything in the humon struct
         ble.LED_pattern = led_p;
-        ble.ir_10mm = ir_values[3];
-        ble.ir_20mm = ir_values[3];
-        ble.ir_30mm = ir_values[2];
-        ble.ir_40mm = ir_values[1];;   
-        ble.sensor_10mm = sensor_values[1];
-        ble.sensor_20mm = sensor_values[6];
-        ble.sensor_30mm = sensor_values[5];
-        ble.sensor_40mm = sensor_values[3];
-        ble.gain_10mm = 0;
-        ble.int_time_10mm = 1;
-        ble.gain_20mm = 1;
-        ble.int_time_20mm = 0;
+        ble.ir_10mm = ir_values[rand_interval(0, 7)];
+        ble.ir_20mm = ir_values[rand_interval(0, 7)];
+        ble.ir_30mm = ir_values[rand_interval(0, 7)];
+        ble.ir_40mm = ir_values[rand_interval(0, 7)];   
+        ble.sensor_10mm = sensor_values[rand_interval(0, 7)];
+        ble.sensor_20mm = sensor_values[rand_interval(0, 7)];
+        ble.sensor_30mm = sensor_values[rand_interval(0, 7)];
+        ble.sensor_40mm = sensor_values[rand_interval(0, 7)];
+        ble.gain_10mm = rand_interval(0, 7);
+        ble.int_time_10mm = rand_interval(0, 7);
+        ble.gain_20mm = rand_interval(0, 7);
+        ble.int_time_20mm = rand_interval(0, 7);
         ble.gain_30mm = 2;
         ble.int_time_30mm = 1;
         ble.gain_40mm = 3;
@@ -194,14 +212,14 @@ int main()
         }
         
         // Notify device that the values have changed if we have an active connection
-        if(ble_connected == true) {
+        if(ble_connected == true && CyBle_GattGetBusStatus() == CYBLE_STACK_STATE_FREE) {
             CyBle_GattsNotification(cyBle_connHandle, &humon_notif_pair); 
         }
         
         // Process BLE events
         CyBle_ProcessEvents();
         
-        CyDelay(200);
+        CyDelay(100);
         
     }
     // Silences warnings. Should never return.
